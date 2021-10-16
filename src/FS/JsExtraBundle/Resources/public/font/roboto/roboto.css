@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Roboto';
+    src: local('Roboto'), local('Roboto-Regular'),
+    url(/bundles/fsjsextra/font/roboto/Roboto.woff2) format('woff2'),
+    url(/bundles/fsjsextra/font/roboto/Roboto.woff) format('woff'),
+    url(/bundles/fsjsextra/font/roboto/Roboto.ttf) format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}

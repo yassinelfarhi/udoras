@@ -1,0 +1,17 @@
+<div  style="text-align:center">
+    <img src="{{ absolute_url(asset('bundles/fsudoras/images/logo-copy.png')) }}" alt="Logo"/>
+    <h2>Training Program invitation</h2>
+
+    {% if loginLink %}
+        Your login is: {{ employee.email }}
+        <br/>
+        Please, <a href="{{ loginLink }}">Set your password</a>
+        <br/>
+        <br/>
+        <br/>
+    {% endif %}
+
+    You are invited to complete the training program {{ trainingProgram.title|training_name_format|nl2br }}.
+    <br/>
+    Link to training program: {{ url('show_training_program', {'link': trainingProgram.link}) }}
+</div>

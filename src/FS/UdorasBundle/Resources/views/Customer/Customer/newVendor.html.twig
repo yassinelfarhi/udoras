@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {{ form_stylesheet(form) }}
+{% endblock %}
+{% set link = path('fs_basic_homepage') %}
+{% if is_granted("ROLE_ADMIN") %}
+    {% set link = path('admin_vendors') %}
+{% elseif is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('index_customer') %}
+{% endif %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <a class="btn btn-back btn-lg" href="{{ link }}">
+                Back
+            </a>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="text-center">Create Vendor</h2>
+
+            {{ form_start(form, {action: path('customer_create_vendor')}) }}
+            <div id="form-content">
+                <div class="styled-select">
+                    {% include "@FSUdoras/FormFormat/vendor.html.twig" %}
+                    <input class="btn btn-lg btn-shadow btn-tall pull-right ajax-submit" id="submit-form" type="submit"
+                           value="Create Vendor"/>
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

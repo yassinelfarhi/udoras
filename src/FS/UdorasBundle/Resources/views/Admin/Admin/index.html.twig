@@ -1,0 +1,57 @@
+{% set search_field = form.query %}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="pull-right">
+        <a href="{{ path("admin_new_customer") }}" class="btn btn-shadow btn-lg btn-admin-create">Create Customer</a>
+    </div>
+    <main>
+        {% include "FSUdorasBundle:Navbar:admin_nav.html.twig" with {'active': 'customers'} %}
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
+                <div class="users-table">
+                    {% if paginator is empty %}
+                        <p>No users</p>
+                    {% else %}
+                        <table class="table font-normal">
+                            <thead>
+                            <tr>
+                                <th class="link-padding">Name of Company</th>
+                                <th>Contact Name</th>
+                                <th>Contact Email</th>
+                                <th>Phone Number</th>
+                                <th class="link-padding" width="160">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for customer in paginator %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('index_customer_profile',{'customer': customer.id}) }}">{{ customer.company }}</a>
+                                    </td>
+                                    <td>
+                                        {{ customer.fullName }}
+                                    </td>
+                                    <td>
+                                        {{ customer.email }}
+                                    </td>
+                                    <td>
+                                        {{ customer.phone }}
+                                    </td>
+                                    <td>
+                                        <a id="{{ customer.id }}_delete" href="{{ path('try_delete_resource',{resource:"customer",id:customer.id}) }}"
+                                           class="ajax-link" data-op="change" >Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <div class="text-center font-normal">
+                        {{ knp_pagination_render(paginator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

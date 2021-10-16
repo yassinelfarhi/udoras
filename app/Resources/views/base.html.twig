@@ -1,0 +1,163 @@
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
+
+{% set sitename = "Udoras" %}
+
+{% block title %}{{ sitename }}{% endblock %}
+
+{% block head_style %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/font/museosans/museosanscyrl.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/font/roboto/roboto.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/bootstrap-modal/bootstrap-modal.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/bootstrap-modal/bootstrap-modal-bs3patch.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/css/select2.min.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/css/jquery-ui.min.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock head_style %}
+
+{% block head_bottom %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/less/style.less'
+    '@FSJsExtraBundle/Resources/public/less/inputs.less'
+    filter='cssrewrite' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block favicon %}
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
+{% endblock %}
+
+
+{% block body %}
+    <div class="page-wrap">
+        {% block navbar %}
+            {% include "header.html.twig" %}
+        {% endblock navbar %}
+
+        {% block container %}
+            <div class="main container">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </div>
+
+    {% block footer %}
+        {% include "footer.html.twig" %}
+    {% endblock %}
+
+    {% block foot_script %}
+        {% javascripts
+        '@FSJsExtraBundle/Resources/public/js/jquery-ui.min.js'
+        '@FSJsExtraBundle/Resources/public/js/jquery.form.min.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/dist/js/bootstrap.min.js'
+        '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
+        '@FSJsExtraBundle/Resources/public/bootstrap-modal/bootstrap-modal.js'
+        '@FSJsExtraBundle/Resources/public/bootstrap-modal/bootstrap-modalmanager.js'
+        '@FSJsExtraBundle/Resources/public/js/socket.io.js'
+        '@FSJsExtraBundle/Resources/public/js/ajax-form.js'
+        '@FSJsExtraBundle/Resources/public/js/ajax-modal.js'
+        '@FSJsExtraBundle/Resources/public/js/ajax-link.js'
+        '@FSJsExtraBundle/Resources/public/js/select2.full.min.js'
+        '@FSJsExtraBundle/Resources/public/js/moment.min.js'
+        '@FSJsExtraBundle/Resources/public/js/moment-timezone-with-data.min.js'
+        '@FSUdorasBundle/Resources/public/js/create-users.js'
+        '@FSTrainingProgramsBundle/Resources/public/js/link.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+        {% javascripts
+        '@FSUdorasBundle/Resources/public/js/common.js'
+        '@FSUdorasBundle/Resources/public/js/websocket.js'
+        output="common.js" %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {% block foot_script_assetic %}
+            {# Please add the javascripts you need in your project #}
+        {% endblock foot_script_assetic %}
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+                $('[data-toggle="popover"]').popover();
+                $(document).on('change keyup focus blur click', 'input,select', function () {
+                    var $this = $(this);
+                    var needFloating = !!$this.val() || $this.is(':focus');
+                    if ($this.is('select')) {
+                        var $option = $this.find('option[value="' + $this.val() + '"]');
+                        if ($option && $option.text()) {
+                            needFloating = true;
+                        }
+                    }
+                    var label = $('label[for="' + $this.attr('id') + '"]');
+                    $this.toggleClass('has-value', needFloating);
+                    label.toggleClass('has-value', needFloating);
+                });
+                $('input,select').trigger('change');
+                setTimeout(function () {
+                    $('input,select').trigger('change');
+                }, 500);
+            });
+        </script>
+    {% endblock foot_script %}
+{% endblock %}
+
+{% block head_script %}
+    {% javascripts
+    '@FSJsExtraBundle/Resources/public/js/jquery-3.1.1.min.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body_end %}
+    <script>
+        jQuery(function ($) {
+            UD.settings.offset = moment().utcOffset();
+            UD.settings.node = {
+                host: 'http://{{ app.request.host }}:{{ node_port }}',
+                port: {{ node_port }}
+            };
+            UD.WebSocketClient.init();
+            {% if app.user %}
+            UD.settings.user = {
+                id: {{ app.user.id }},
+                ssid: "{{ app.session.id }}",
+                communicator: "{{ url('release_locked_resource', { user:app.user.id, ssid:app.session.id }) }}",
+                resourceFlush: "{{ url('flush_deleted_resource', { user:app.user.id, ssid:app.session.id }) }}"
+            };
+            UD.WebSocketClient.initUser(
+                    UD.settings.user.id,
+                    UD.settings.user.ssid,
+                    UD.settings.user.communicator,
+                    UD.settings.user.resourceFlush
+            );
+            {% endif %}
+        });
+    </script>
+{% endblock body_end %}

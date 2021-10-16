@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block head_bottom %}
+    {{ form_stylesheet(form) }}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <a class="btn btn-lg btn-back" href="{{ path('index_customer_vendor_employees',{vendor:vendor.id}) }}">
+                Back
+            </a></div>
+        <div class="col-sm-6">
+            <h2 class="text-center">Create {{ vendor.fullName }} Employee</h2>
+
+            {{ form_start(form, {action: path('create_customer_vendor_employee', {vendor: vendor.id})}) }}
+            <div id="form-content">
+                <div>
+                    {{ form_widget(form) }}
+                </div>
+                <input class="btn btn-lg btn-tall btn-shadow ajax-submit pull-right" id="submit-form" type="submit"
+                       value="Create Employee"/>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block foot_script %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock foot_script %}

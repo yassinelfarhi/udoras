@@ -1,0 +1,16 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title text-center" >Thank you for joining us!</h4>
+        </div>
+        <div class="modal-body text-center">
+            <p>We have sent a confirmation link to your email. Please, follow the link to confirm your account.</p>
+
+            <a href="{{ path('fs_basic_homepage') }}" class="btn">
+                Close
+            </a>
+        </div>
+    </div>
+{% endblock fos_user_content %}

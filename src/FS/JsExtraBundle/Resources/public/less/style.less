@@ -1,0 +1,396 @@
+@import "_colors";
+
+html, body {
+  height: 100%;
+  color: @text-color;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0.8px;
+}
+
+.page-wrap {
+  min-height: 100%;
+  margin-bottom: -60px;
+}
+
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+
+.footer, .page-wrap:after {
+  height: 60px;
+}
+
+.footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: @footer-color;
+  color: @footer-text-color;
+
+  p {
+    margin: 20px 0;
+  }
+  > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+    position: relative;
+  }
+  a {
+    color: inherit;
+    &.privacy {
+      position: absolute;
+      left: 0;
+      &.terms {
+        left: 130px;
+      }
+      &:hover {
+        background: none;
+        opacity: 0.6;
+      }
+    }
+    &.support {
+      position: absolute;
+      right: 0;
+      &:hover {
+        background: none;
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+.required:after {
+  content: "*";
+}
+
+main {
+  .tab-content {
+    margin-top: 25px;
+  }
+  .users-table {
+    .tab-content
+  }
+  .advanced-search {
+    margin-top: 10px;
+    input.filter-input {
+      width: 45%;
+      display: inline;
+    }
+  }
+}
+
+.container-fluid {
+  p {
+    margin-top: 30px;
+  }
+}
+
+label.col-sm-3 {
+  text-align: left !important;
+}
+
+a {
+  color: @link-color;
+  border-radius: 2px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  &:hover {
+    text-decoration: none;
+    background: @link-hover-background;
+  }
+  &:active, &:focus, &:visited {
+    text-decoration: none !important;
+  }
+  &.fade-out {
+    color: @text-color;
+    &:hover {
+      color: @text-color;
+      text-decoration: none;
+      background: none;
+      opacity: 0.6;
+    }
+  }
+}
+
+label {
+  color: @label-color;
+}
+
+.registration-option {
+  border-radius: 4px;
+  width: 366px;
+  height: 150px;
+  background-color: @button-grey-color;
+  color: @button-text-color;
+  text-decoration: none;
+  text-align: center;
+  padding-top: 70px;
+  text-transform: uppercase;
+  margin: 70px;
+  box-shadow: 0 10px 50px @button-shadow-color;
+  &:hover {
+    text-decoration: none;
+    color: @button-text-hover-color;
+    background-color: @button-grey-hover-color;
+  }
+}
+
+.tall {
+  margin: 30px 0;
+}
+
+h2, h3 {
+  margin-top: 5px;
+}
+
+h4.tall {
+  margin: 69px 0;
+}
+
+h5.tall {
+  margin: 61px 0 40px;
+}
+
+hr.last {
+  margin-bottom: 250px;
+}
+
+div.last {
+  height: 250px;
+}
+
+.key-menu {
+  margin: 30px 0;
+  position: relative;
+  background-image: url(/bundles/fsudoras/images/logo-copy.png);
+  background-repeat: no-repeat;
+  background-size: 108px 108px;
+  background-position: 40px 45px;
+  display: inline-block;
+  .navbar-nav {
+    position: absolute;
+    top: 95px;
+    left: 242px;
+    li {
+      &:nth-child(1) a {
+        width: 111px;
+      }
+      &:nth-child(2) a {
+        margin-left: 80px;
+        width: 97px;
+      }
+      &:nth-child(3) a {
+        margin-left: 71px;
+        width: 127px;
+        height: 54px;
+      }
+      &:nth-child(4) a {
+        margin-left: 69px;
+        width: 128px;
+        height: 50px;
+      }
+    }
+  }
+  &.key-2 .navbar-nav li:nth-child(2) a {
+    width: 181px;
+  }
+}
+
+header .container {
+  font-family: "Museo Sans Cyrl", sans-serif;
+  position: relative;
+  min-height: 100px;
+  .navbar-nav {
+    li {
+      a {
+        cursor: pointer;
+        height: 44px;
+        padding: 16px 0;
+        text-align: center;
+        text-transform: uppercase;
+        color: @label-color;
+        margin-left: 30px;
+        background: transparent !important;
+        &:hover {
+          border-bottom: 5px solid @button-color;
+        }
+      }
+      &.active a {
+        border-bottom: 5px solid @button-color;
+      }
+    }
+    &.navbar-right {
+      position: absolute;
+      right: 25px;
+      top: 20px;
+      li a:hover, li.active a {
+        border: none;
+        opacity: 0.6;
+      }
+    }
+  }
+  #filter-custom-form, #header_extra {
+    z-index: 1;
+    top: 125px;
+    right: 10px;
+    position: absolute;
+    display: inline-block;
+    &.at-bottom {
+      left: 282px;
+      top: 200px;
+    }
+    @media (max-width: 1200px) {
+      .at-bottom;
+    }
+  }
+  #filter-custom-form {
+    width: 300px;
+    input {
+      width: 300px;
+    }
+    button.submit {
+      background: transparent;
+      border: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      padding: 0 10px;
+      outline: none;
+    }
+  }
+}
+
+#filter-custom-form {
+  input, select {
+    height: 48px;
+    border-color: @search-border-color;
+    box-shadow: 0 10px 50px @search-shadow-color;
+    background-position: 95% center;
+  }
+}
+
+.form-group.form-text {
+  margin: 60px 0;
+  a:not(.btn) {
+    color: @button-color;
+  }
+}
+
+#logo {
+  margin-top: 72px;
+}
+
+.sign-up {
+  font-weight: bold;
+  color: @text-color;
+}
+
+.row.info-body {
+  margin-top: 100px
+}
+
+.table {
+  > thead > tr > th {
+    border-bottom: 1px solid @table-border-color;
+    color: @table-header-color;
+    &.link-padding {
+      padding-left: 32px;
+    }
+  }
+  > tbody > tr > td {
+    border-bottom-color: @table-border-color;
+    vertical-align: middle;
+    height: 62px;
+    a {
+      padding: 15px 27px;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      min-height: 48px;
+    }
+    span.link-padding {
+      padding-left: 27px;
+      -ms-box-decoration-break: clone;
+      -o-box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+  }
+}
+
+ul.pagination {
+  li {
+    a {
+      border: none;
+      color: @text-color;
+    }
+    &.active {
+      span, a, span:hover, a:hover {
+        outline: none;
+        background: none;
+        border: none;
+        text-decoration: underline;
+        color: @text-color;
+      }
+    }
+    &.disabled span {
+      border: none;
+    }
+  }
+}
+
+.text-danger {
+  color: @deleted-color;
+}
+
+.svg-icon {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -3px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  &.svg-icon-user {
+    background-image: url(/bundles/fsudoras/images/icon-profile.svg);
+  }
+  &.svg-icon-logout {
+    background-image: url(/bundles/fsudoras/images/icon-logout.svg);
+  }
+}
+
+.nav.nav-tabs > li > a {
+  padding: 20px 15px;
+}
+
+.profile {
+  color: @profile-text-color;
+  .profile-header {
+    color: @profile-header-color;
+    &:after {
+      content: ':';
+    }
+  }
+}
+
+.modal-body.send-requests {
+  overflow-y: hidden;
+  .column {
+    height: 285px;
+    overflow-y: auto;
+  }
+}
+
+.privacy-block {
+  margin-bottom: 150px;
+  h4{
+    margin-top: 30px;
+  }
+}

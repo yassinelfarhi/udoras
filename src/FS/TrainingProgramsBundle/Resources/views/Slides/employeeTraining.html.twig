@@ -1,0 +1,100 @@
+{% extends '::base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/slides.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid slide">
+        <div class="row status-row">
+            <div class="col-sm-3 col-sm-offset-1 logo">
+                {% image '@FSUdorasBundle/Resources/public/images/logo-copy.png' %}
+                <img src="{{ asset_url }}" alt="Logo"/>
+                {% endimage %}
+            </div>
+            <div class="col-sm-4">
+                <div class="progress-text text-center">
+                    <span id="progress-current-slide">1</span>/{{ slidesNumber }}
+                </div>
+                <div class="progress-bar">
+                    <span style="width: 0"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 content main-slide">
+            </div>
+        </div>
+
+        <div class="row buttons-row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="row">
+                    <div class="col-sm-3 text-left">
+                        <a class="btn btn-lg prev-slide"
+                           href="#">
+                            <i class="glyphicon glyphicon-menu-left"></i>
+                            Previous slide
+                        </a>
+                    </div>
+                    <div class="col-sm-3 text-left">
+                        <a class="btn btn-lg pause-presentation"
+                           href="#">
+                            Pause Presentation
+                        </a>
+                    </div>
+                    <div class="col-sm-2 text-center">
+                        <h5 class="time-limit">
+                            00:00
+                        </h5>
+                    </div>
+                    <div class="col-sm-4 text-right ">
+                        <span class="question-error text-danger"></span>
+                        <a class="btn btn-lg next-slide"
+                           href="#">
+                            Next Slide
+                            <i class="glyphicon glyphicon-menu-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="modal fade" data-keyboard="false" data-backdrop="static" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center"></h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="modal-body-text"></p>
+                </div>
+                <div class="modal-footer text-center" style="text-align: center">
+                    <div class="modal-footer-button">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block foot_script %}
+        {{ parent() }}
+        {% javascripts
+        "@FSTrainingProgramsBundle/Resources/public/js/trainingprogram/*"
+        output="training.js" %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <script>
+            jQuery(function ($) {
+                UDT.Settings.link = "{{ trainingProgram.link }}";
+                UDT.Communicator.init({{ trainingState.id }});
+                UDT.SlideManager.init({{ trainingState.id }},{{ trainingState.currentSlide }},{{ trainingState.nextSlide }});
+                UDT.Settings.slideCount = {{ slidesNumber }};
+            })
+        </script>
+    {% endblock %}
+{% endblock body %}

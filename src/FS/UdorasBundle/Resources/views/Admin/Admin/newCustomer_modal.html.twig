@@ -1,0 +1,13 @@
+{{ form_stylesheet(form) }}
+{{ form_start(form, {action: path('admin_create_customer')}) }}
+<div id="form-content">
+    <div class="styled-select">
+        {% include "@FSUdoras/FormFormat/customer.html.twig" %}
+    </div>
+    <input class="btn btn-lg btn-tall btn-shadow pull-right ajax-submit" id="submit-form" type="submit"
+           value="Create Customer"/>
+</div>
+{{ form_end(form) }}
+<script>
+    $('input,select').trigger('change');
+</script>

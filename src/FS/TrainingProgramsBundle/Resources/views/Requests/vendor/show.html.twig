@@ -1,0 +1,70 @@
+{% set search_field = form.title %}
+{% extends "base.html.twig" %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/requests.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
+                <div class="users-table">
+                    {% if trainingProgramPagination is empty %}
+                        <p>No Programs</p>
+                    {% else %}
+                        <table class="table font-normal">
+                            <thead>
+                            <tr>
+                                <th class="link-padding">Title</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th width="160">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for program in trainingProgramPagination %}
+                                {% set request = program.requests[0] %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('show_training_program', {'link': program.link}) }}">
+                                            {{ program.title|training_name_format|nl2br }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        ${{ program.price }}
+                                    </td>
+                                    <td>
+                                        {{ request.status }}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-in-table ajax-modal"
+                                           href="{{ path('fs_training_programs_requests_show_employees', {trainingProgram: program.id}) }}">
+                                            Send request
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <div class="text-center font-normal">
+                        {{ knp_pagination_render(trainingProgramPagination) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block foot_script %}
+    {{ parent() }}
+
+    {% javascripts '@FSTrainingProgramsBundle/Resources/public/js/requests.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

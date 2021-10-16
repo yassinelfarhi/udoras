@@ -1,0 +1,27 @@
+{% block subject %}
+{% autoescape false %}
+    Welcome to uDoras
+{% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+
+{% endblock %}
+
+{% block body_html %}
+
+<div style="text-align:center">
+    <img src="{{ absolute_url(asset('bundles/fsudoras/images/logo-copy.png')) }}" alt="Logo"/>
+    <h2>Welcome to uDoras!</h2>
+    <br/>
+    {% if 'ROLE_VENDOR' in user.getRoles() %}You have been registered as a vendor.{% else %}You have been registered as an employee.{% endif %}
+    <br/>
+    {% autoescape false %}
+    Your login is: {{ user.email }}
+    {% endautoescape %}
+    <br/>
+    {% autoescape false %}
+    Follow the link to confirm your registration {{ confirmationUrl }}
+    {% endautoescape %}
+</div>
+{% endblock %}

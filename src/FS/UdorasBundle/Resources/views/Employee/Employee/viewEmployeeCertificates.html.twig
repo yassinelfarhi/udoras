@@ -1,0 +1,92 @@
+{% set search_field = form.title %}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {% set is_not_customer = "ROLE_CUSTOMER" not in app.user.roles %}
+    {% set is_not_employee = employee != app.user %}
+    <main>
+        {% if is_not_employee %}
+            <h2 class="text-center">{{ employee.fullName }}'s Certificates</h2>
+        {% endif %}
+
+        <div class="users-table">
+            {% if paginator is empty %}
+                <p>No Certificates</p>
+            {% else %}
+                <table class="table font-normal">
+                    <thead>
+                    <tr>
+                        {% if is_not_customer %}
+                            <th>Customer</th>
+                        {% endif %}
+                        <th>Training Title</th>
+                        <th>Status</th>
+                        <th width="350">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for trainingState in paginator %}
+                        {% set training = trainingState.training %}
+                        {% set customer = training.customer|default(null) %}
+                        <tr>
+                            {% if is_not_customer %}
+                                <td>
+                                    {% if customer %}
+                                        {% if customer.deletedAt %}
+                                            <span class="text-danger link-padding">{{ customer.company }} (deleted)</span>
+                                        {% else %}
+                                            <a href="{{ path('index_customer_profile',{customer:customer.id}) }}">{{ customer.company }}</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="link-padding">No company</span>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td>
+                                {% if training %}
+                                    {% if training.deletedAt %}
+                                        <span class="text-danger link-padding">{{ training.title|training_name_format|nl2br }}
+                                            (deleted)</span>
+                                    {% else %}
+                                        <a href="{{ path('show_training_program',{link:training.link}) }}">
+                                            {{ training.title|training_name_format|nl2br }}
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="link-padding">No training</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if trainingState.passedStatus == 'in_progress' %}
+                                    In Progress
+                                {% elseif trainingState.passedStatus == 'passed' %}
+                                    <span class="text-success">Passed</span>
+                                {% else %}
+                                    <span class="text-danger">Failed</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if trainingState.passedStatus == 'passed' %}
+                                    <a class="btn btn-in-table btn-yellow" style="margin-right:25px"
+                                       href="{{ path('employee_certificate', {'employeeTrainingState': trainingState.id}) }}">
+                                        View
+                                    </a>
+                                    <a class="btn btn-in-table"
+                                       href="{{ path('employee_certificate_download', {'trainingStateId': trainingState.id}) }}">
+                                        Download
+                                    </a>
+                                {% else %}
+                                    Certificate not available.
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <div class="text-center font-normal">
+                {{ knp_pagination_render(paginator) }}
+            </div>
+        </div>
+    </main>
+{% endblock %}

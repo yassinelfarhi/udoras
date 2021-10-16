@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {% include 'header.html.twig' with {hideMenu: true} %}
+     <main class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <a class="btn btn-lg btn-back btn-shadow"
+                   href="{{ referrer }}">
+                    Back
+                </a>
+            </div>
+            <div class="col-sm-3 col-sm-offset-6 text-right">
+                <a class="btn btn-lg btn-shadow" style="margin-bottom: 25px"
+                   href="{{ path('employee_certificate_download', {'trainingStateId': trainingState.id}) }}">
+                    Download
+                </a>
+                <a class="btn btn-lg btn-shadow btn-grey ajax-modal"
+                   href="{{ path('employee_certificate_share', {'trainingStateId': trainingState.id}) }}">
+                    Share
+                </a>
+            </div>
+        </div>
+        <div class="row" style="margin-top:30px">
+            <div class="col-sm-12 text-center">
+                <img src="{{ path('employee_certificate_image', {'trainingStateId': trainingState.id}) }}">
+            </div>
+        </div>
+
+
+    </main>
+    {% block foot_script %}
+        {{ parent() }}
+
+        {% javascripts
+        '@FSTrainingProgramsBundle/Resources/public/js/share-certificate.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
+{% endblock %}

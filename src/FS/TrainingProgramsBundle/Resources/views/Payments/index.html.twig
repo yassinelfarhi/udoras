@@ -1,0 +1,83 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <main>
+        <div>
+            {% if paymentsPagination is empty %}
+                <p>No Payments</p>
+            {% else %}
+                <table class="table font-normal">
+                    <thead>
+                    <tr>
+                        <th class="link-padding">User</th>
+                        <th class="link-padding">Training</th>
+                        <th>Date</th>
+                        <th>Total Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for payment in paymentsPagination %}
+                        <tr>
+                            <td>
+                                {% if payment.user %}
+                                    {% if payment.user.hasRole('ROLE_VENDOR') %}
+                                        {%  if payment.user.deletedAt %}
+                                            <span class="text-danger link-padding">
+                                                Vendor {{ payment.user.fullName }} (deleted)
+                                            </span>
+                                        {% else %}
+                                            <a href="{{ path('index_vendor_profile', {'vendor': payment.user.id}) }}">
+                                                Vendor {{ payment.user.fullName }}
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        {%  if payment.user.deletedAt %}
+                                            <span class="text-danger link-padding">
+                                                Employee {{ payment.user.fullName }} (deleted)
+                                            </span>
+                                        {% else %}
+                                            <a href="{{ path('index_employee_profile', {'employee': payment.user.id}) }}">
+                                                Employee {{ payment.user.fullName }}
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-danger link-padding">
+                                        User was deleted.
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if payment.trainingProgram %}
+                                    {% if payment.trainingProgram.deletedAt %}
+                                        <span class="text-danger link-padding">
+                                            {{ payment.trainingProgram.title|training_name_format|nl2br }}
+                                        </span>
+                                    {% else %}
+                                        <a href="{{ path('show_training_program', {'link': payment.trainingProgram.link}) }}">
+                                            {{ payment.trainingProgram.title|training_name_format|nl2br }}
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-danger link-padding">
+                                        Training was deleted.
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ payment.date | date('d M. Y') }}
+                            </td>
+                            <td>
+                                ${{ payment.totalPrice }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <div class="text-center font-normal">
+                {{ knp_pagination_render(paymentsPagination) }}
+            </div>
+        </div>
+    </main>
+{% endblock %}

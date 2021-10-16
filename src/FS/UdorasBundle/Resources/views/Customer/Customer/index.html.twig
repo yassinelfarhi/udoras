@@ -1,0 +1,53 @@
+{% set search_field = form.query %}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <main>
+        <div class="pull-right">
+            <a href="{{ path("customer_new_vendor") }}" class="btn btn-lg btn-shadow" style="position: relative;top: -25px;">Create Vendor</a>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <div class="users-table">
+                    {% if paginator is empty %}
+                        <p>No users</p>
+                    {% else %}
+                        <table class="table font-normal">
+                            <thead>
+                            <tr>
+                                <th class="link-padding">Vendor</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th width="160">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for vendor in paginator %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('index_vendor_profile', {'vendor': vendor.id}) }}">
+                                            {{ vendor.fullName }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ vendor.email }}
+                                    </td>
+                                    <td>
+                                        {{ vendor.phone }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('index_customer_vendor_employees', {'vendor':vendor.id}) }}" class="btn btn-in-table btn-grey">View employees</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <div class="text-center font-normal">
+                        {{ knp_pagination_render(paginator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock %}

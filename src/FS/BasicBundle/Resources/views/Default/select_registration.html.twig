@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+{% block navbar %}
+    {% include "@FSUser/registrationHeader.html.twig" %}
+{% endblock navbar %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h4>
+                        Please, choose a registration option:
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <a href="{{ path('fs_user_register_vendor') }}"
+                           class="select-box pull-right registration-option">
+                            I am a vendor
+                        </a>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <a href="{{ path('fs_user_register_employee') }}"
+                           class="select-box pull-left registration-option">
+                            I am an employee
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

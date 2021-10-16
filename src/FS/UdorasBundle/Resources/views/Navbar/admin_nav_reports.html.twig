@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="{% if active == 'trainings' %}active{% endif %}">
+        <a href="{{ path('admin_reports_training_action') }}">Trainings</a>
+    </li>
+    <li role="presentation" class="{% if active == 'payments' %}active{% endif %}">
+        <a href="{{ path('admin_reports_payment_action') }}">Payments</a>
+    </li>
+</ul>

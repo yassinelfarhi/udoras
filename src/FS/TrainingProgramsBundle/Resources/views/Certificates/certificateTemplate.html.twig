@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}
+    {% stylesheets
+    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
+    '@FSTrainingProgramsBundle/Resources/public/less/certificate.less' %}
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+<main>
+    <div>
+        <div class="text-center">
+            <img  class="logo" src="{{ app.request.getSchemeAndHttpHost() ~ asset('bundles/fstrainingprograms/img/logo.png') }}">
+        </div>
+    </div>
+    <div class="content">
+        <h1 class="text-center header">
+            Training Certificate {{ trainingState.certificateId|upper }} | <b>{{ trainingState.training.title|training_name_format|nl2br }}</b>
+        </h1>
+        <p class="text-center text">
+            This is to certify that
+            <br>
+            <b>{{ trainingState.access.employee.fullName }}</b>
+            <br>
+            Employed by
+            <br>
+            <b>{{ trainingState.training.customer.company }}</b>
+            <br>
+            Completed and passed by examination the
+            <br>
+            <b class="text-uppercase">{{ trainingState.training.title|training_name_format|nl2br }} Course</b>
+        </p>
+        <p class="text-center small-text">
+            Successfully completed the programme of training and has achieved a satisfactory degree of competence in the assessment which concluded the course.
+        </p>
+        <p class="text-center date">
+            <b>On: {{ trainingState.endTime | date('d M. Y') }}</b> | Valid until: {{ trainingState.validUntil | date('d M. Y') }}
+        </p>
+        <p class="text-center footer">
+            uDoras | udoras.com
+        </p>
+    </div>
+</main>
+{% endblock %}

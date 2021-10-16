@@ -1,0 +1,160 @@
+{% set is_admin = "ROLE_ADMIN" in app.user.roles %}
+<form method="GET" class="form-horizontal" id="filter-custom-form">
+    <div class="main-search">
+        <div class="row">
+            <div class="col-sm-2">
+                Vendor
+            </div>
+            <div class="col-sm-2">
+                Employee
+            </div>
+            <div class="col-sm-4">
+                Date completed
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                {{ form_widget(form.vendor, {'attr': {'class': 'vendor'}}) }}
+            </div>
+            <div class="col-sm-2">
+                {{ form_widget(form.employee) }}
+            </div>
+            <div class="validate-pair">
+                <div class="col-sm-3 col-xs-12 date-pair">
+                    {{ form_widget(form.dateBetween.left_date, {'attr': {'placeholder': 'from', 'class': 'date date-left validate validate-date'}}) }}
+                    <span class="dash">-</span>
+                    {{ form_widget(form.dateBetween.right_date, {'attr': {'placeholder': 'to', 'class': 'date date-right validate validate-date pull-right'}}) }}
+                </div>
+                <span class="hidden validate-pair-error">Date completed: "from" date should not be greater than "to" date</span>
+            </div>
+            <div class="col-sm-3 col-sm-offset-2 text-right">
+                <button class="btn btn-md btn-shadow validateOn" type="submit" name="submit-filter">Search</button>
+                <a id='advanced' class="btn btn-link btn-md" href="#show" data-status="show">Advanced</a>
+            </div>
+        </div>
+    </div>
+    <div class="advanced-search" style="display: none">
+        <div class="row">
+            {% if is_admin %}
+                <div class="col-sm-2">
+                    Customer
+                </div>
+            {% endif %}
+            <div class="col-sm-2">
+                Training Title
+            </div>
+            <div class="col-sm-2">
+                Status
+            </div>
+            <div class="col-sm-2">
+                Expires
+            </div>
+        </div>
+        <div class="row">
+            {% if is_admin %}
+                <div class="col-sm-2">
+                    {{ form_widget(form.customer) }}
+                </div>
+            {% endif %}
+            <div class="col-sm-2">
+                {{ form_widget(form.title) }}
+            </div>
+            <div class="col-sm-2 styled-select">
+                {{ form_widget(form.status) }}
+            </div>
+            <div class="validate-pair">
+                <div class="col-sm-3 col-xs-12 date-pair">
+                    {{ form_widget(form.expiresBetween.left_date, {'attr': {'placeholder': 'from', 'class': 'date date-left validate validate-date'}}) }}
+                    <span class="dash">-</span>
+                    {{ form_widget(form.expiresBetween.right_date, {'attr': {'placeholder': 'to', 'class': 'date date-right validate validate-date pull-right'}}) }}
+                </div>
+                <span class="hidden validate-pair-error">Expires: "from" date should not be greater than "to" date</span>
+            </div>
+            <div class="col-sm-3">
+                <div class="checkbox">
+                    <input type="checkbox" id="training_report_filter_vendors" name="training_report_filter[vendors]"
+                           class="block-vendor" value="1" {{ form.vendors.vars.data? 'checked':'' }} >
+                    <label for="training_report_filter_vendors" class="checkbox-style"></label>
+                    <label for="training_report_filter_vendors">
+                        Search for Employees without a Vendor
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var $link = $('#advanced'),
+                vendor = $('input.vendor'),
+                checkbox = $('input[type="checkbox"].block-vendor');
+
+        if (checkbox.attr('checked')) {
+            vendor.attr('disabled', 'disabled');
+        }
+
+        checkbox.click(function () {
+            if ($(this).is(':checked')) {
+                vendor.attr('disabled', 'disabled');
+            } else {
+                vendor.removeAttr('disabled');
+            }
+        });
+
+        /*if (window.location.hash) {
+         var hash = window.location.hash.substring(1);
+         if (hash == 'show') {
+         $link.data('status', 'show');
+         $link.trigger('click');
+         console.log('show')
+         } else if (hash == 'hide') {
+         $link.data('status', 'hide');
+         $link.trigger('click');
+         console.log('hide')
+         }
+         }*/
+        $link.click(function () {
+
+            var $this = $(this);
+            var $advancedSearch = $('.advanced-search');
+
+            if ($this.data('status') == 'show') {
+                $advancedSearch.fadeIn();
+                $this.html('Regular');
+                $this.data('status', 'hide');
+                $this.attr('href', '#hide');
+            } else {
+                $advancedSearch.fadeOut(400, function () {
+                    $advancedSearch.find('input').val('');
+                    $advancedSearch.find('input').parent().removeClass('pair has-error');
+                    $advancedSearch.find('select').val('');
+                });
+                $this.html('Advanced');
+                $this.data('status', 'show');
+                $this.attr('href', '#show');
+            }
+
+            return false;
+        });
+
+    });
+    jQuery(document).ready(function ($) {
+        $('.date-left').datetimepicker({
+            "formatter": "js",
+            "format": "mm/dd/yyyy",
+            "minView": 2,
+            "keyboardNavigation": true,
+            "autoclose": true
+        });
+        $('.date-right').datetimepicker({
+            "formatter": "js",
+            "format": "mm/dd/yyyy",
+            "minView": 2,
+            "keyboardNavigation": true,
+            "autoclose": true
+        });
+    });
+
+</script>
+

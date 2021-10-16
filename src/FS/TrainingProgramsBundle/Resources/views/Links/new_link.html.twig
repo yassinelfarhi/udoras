@@ -1,0 +1,29 @@
+{{ form_start(form, {
+    'action': path('admin_add_link_to_training_program', {trainingProgram: trainingProgram.id})
+}) }}
+<div class="new-link-form">
+    <div class="form-group label-static">
+        <div class="col-sm-3">{{ form_label(form.trainings) }}</div>
+        <div class="col-sm-2">
+            {{ form_widget(form.trainings, {attr: {class: 'text-right'}}) }}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3">
+            {{ form_errors(form.trainings) }}
+        </div>
+    </div>
+    <div class="form-group label-static">
+        <div class="col-sm-3">{{ form_label(form.comment) }}</div>
+        <div class="col-sm-8">
+            {{ form_widget(form.comment) }}
+            {{ form_errors(form.comment) }}
+        </div>
+    </div>
+    <input type="submit" class="btn save-link" value="Add">
+    <input type="button" class="btn btn-grey cancel-link-creation" value="Cancel">
+</div>
+{{ form_end(form) }}
+<script>
+    $(function () {
+        $('input,select').trigger('change');
+    });
+</script>

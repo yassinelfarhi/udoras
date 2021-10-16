@@ -1,0 +1,55 @@
+<div class="modal-content requests">
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-sm-6 text-center">
+                <h4>Vendors</h4>
+            </div>
+            <div class="col-sm-6 text-center">
+                <h4>Employees</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body send-requests">
+        <div class="row">
+            <div class="col-sm-6 column vendors">
+                <div class="row item checked">
+                    <a class="col-sm-10 vendor-ajax-link"
+                       href="{{ path('requests_vendor', {'trainingProgram': trainingProgram.id}) }}">
+                        All
+                    </a>
+                </div>
+
+                {% for vendor in customer.vendors  %}
+                    <div class="row item vendor">
+                        <a class="col-sm-10 vendor-ajax-link"
+                           href="{{ path('requests_vendor', {'trainingProgram': trainingProgram.id, 'vendor': vendor.id}) }}">
+                            {{ vendor.fullName }}
+                        </a>
+
+                        {% if not vendor.hasRequestTo(trainingProgram) %}
+                            <div class="col-sm-2 vendor-checkbox">
+                                <input type="checkbox" class="request" id="vendor_{{ vendor.id }}" value="{{ vendor.id }}">
+                                <label class="checkbox-style" for="vendor_{{ vendor.id }}"></label>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-sm-6 column employees">
+                {% include 'FSTrainingProgramsBundle:Requests:updateEmployees.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">
+            Cancel
+        </button>
+        <a class="btn create-training-requests" disabled="disabled"
+           href="{{ path('fs_training_programs_requests_create', {'trainingProgram': trainingProgram.id}) }}">
+            Send request
+        </a>
+    </div>
+</div>
+

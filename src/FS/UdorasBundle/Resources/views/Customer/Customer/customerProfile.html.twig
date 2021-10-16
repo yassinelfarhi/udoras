@@ -1,0 +1,152 @@
+{% if is_granted('ROLE_ADMIN') %}
+    {% set link = path('index_admin') %}
+{% elseif is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('index_customer') %}
+{% else %}
+    {% set link = '/' %}
+{% endif %}
+{% extends 'base.html.twig' %}
+{% block content %}
+    <div class="profile">
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{{ link }}" class="btn btn-back">Back</a>
+            </div>
+            <div class="col-sm-4">
+                <h3 class="text-center">
+                    {% if app.user == customer %}
+                        My Profile
+                    {% else %}
+                        {{ customer.company }}
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="col-sm-4 text-right">
+                {# TODO rewrite with hasAccessTo #}
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <p>
+                        <a class="btn btn-lg btn-shadow"
+                           href="{{ path('customer_training_programs', {customer: customer.id}) }}">
+                            Open Trainings
+                        </a>
+                    </p>
+                {% endif %}
+                <p class="">
+                    <a href="{{ path('try_lock_resource',{resource:"customer",id:customer.id,path:"customer_edit_profile"}) }}"
+                       class="btn btn-lg btn-light btn-shadow ajax-link" data-op="redirect">
+                        Edit
+                    </a>
+                </p>
+
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <p>
+                        <a id="{{ customer.id }}_delete"
+                           href="{{ path('try_delete_resource',{resource:"customer",id:customer.id}) }}"
+                           class="ajax-link btn btn-lg btn-shadow btn-red" data-op="change">Delete</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Contact Name
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.fullName }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Contact Email
+                        </p>
+
+                        <p class="col-sm-6">
+                            {{ customer.email }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Phone Number
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.phone }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <hr/>
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Name of Company
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.company }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <hr/>
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="col-sm-8">
+                            <b>Address</b>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Street
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.street }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            City
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.city }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            State
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.state }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Country
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.country }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Zip Code
+                        </p>
+                        <p class="col-sm-6">
+                            {{ customer.zipCode }}
+                        </p>
+                    </div>
+                </div>
+                <hr class="last">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

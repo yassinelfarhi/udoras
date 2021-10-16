@@ -1,0 +1,120 @@
+{% set header_extra %}
+    <div>
+        {% if "ROLE_ADMIN" in app.user.roles %}
+            <a class="btn btn-lg btn-grey btn-shadow"
+               href="{{ path('admin_reports_training_pdf_action') }}?{{ app.request.queryString }}">
+                Download PDF
+            </a>
+        {% else %}
+            <a class="btn btn-lg btn-grey btn-shadow"
+               href="{{ path('customer_reports_training_pdf_action') }}?{{ app.request.queryString }}">
+                Download PDF
+            </a>
+        {% endif %}
+    </div>
+{% endset %}
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets '@FSUdorasBundle/Resources/public/less/reports.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen">
+    {% endstylesheets %}
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/scdatetimepicker/css/datetimepicker.css') }}">
+{% endblock %}
+
+{% block content %}
+    {% include "FSUdorasBundle:Admin/Form:reportSearchForm.html.twig" %}
+    <br/>
+    <br/>
+    <div class="users-table">
+        {% if paginator is empty %}
+            <p>No Reports</p>
+        {% else %}
+            <table class="table font-normal">
+                <thead>
+                <tr>
+                    <th class="link-padding">Vendor</th>
+                    <th class="link-padding">Employee</th>
+                    <th class="link-padding">Trainings</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Expires</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for trainingState in paginator %}
+                    {% set access = trainingState.access %}
+                    {% set employee = access.employee %}
+                    {% set training = trainingState.training %}
+                    {% if access.request and access.request.vendor %}
+                        {% set vendor = access.request.vendor %}
+                    {% else %}
+                        {% set vendor = null %}
+                    {% endif %}
+                    <tr>
+                        <td>
+                            {% if vendor %}
+                                {% if vendor.deletedAt %}
+                                    <span class="text-danger link-padding">{{ vendor.fullName }} (deleted)</span>
+                                {% else %}
+                                    <a href="{{ path('index_vendor_profile',{vendor:vendor.id}) }}">{{ vendor.fullName }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="link-padding">No vendor</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if employee %}
+                                {% if employee.deletedAt %}
+                                    <span class="text-danger link-padding">{{ employee.fullname }} (deleted)</span>
+                                {% else %}
+                                    <a href="{{ path('index_employee_profile',{employee:employee.id}) }}">{{ employee.fullname }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="link-padding">No employee</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if training %}
+                                {% if training.deletedAt %}
+                                    <span class="text-danger link-padding">{{ training.title|training_name_format|nl2br }}
+                                        (deleted)</span>
+                                {% else %}
+                                    <a href="{{ path('show_training_program',{link:training.link}) }}">{{ training.title|training_name_format|nl2br }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="link-padding">No training</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                                        <span class="{{ trainingState.passedStatus|status_class }}">
+                                            {{ trainingState.passedStatus|training_status }}
+                                        </span>
+                        </td>
+                        <td>
+                            {{ get_date_end(trainingState) }}
+                        </td>
+                        <td>
+                            {{ get_date_expires(trainingState) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center">
+                {{ knp_pagination_render(paginator) }}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block foot_script %}
+    {{ parent() }}
+
+    <script src="{{ asset('bundles/scdatetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+
+    {% javascripts '@FSUdorasBundle/Resources/public/js/validate-reports-form.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

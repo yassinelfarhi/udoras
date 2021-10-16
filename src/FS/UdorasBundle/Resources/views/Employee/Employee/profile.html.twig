@@ -1,0 +1,147 @@
+{% if is_granted('ROLE_ADMIN') %}
+    {% set link = path('admin_employee') %}
+{% elseif is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('index_customer_vendor_employees', {vendor: employee.vendor.id}) %}
+{% elseif is_granted('ROLE_VENDOR') %}
+    {% set link = path('index_vendor') %}
+{% elseif is_granted('ROLE_EMPLOYEE') %}
+    {% set link = path('index_employee') %}
+{% else %}
+    {% set link = '/' %}
+{% endif %}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="profile">
+        <div class="row">
+            <div class="col-sm-3">
+                <a href="{{ link }}" class="btn btn-back">Back</a>
+            </div>
+            <div class="col-sm-6">
+                <h3 class="text-center">
+                    {% if app.user == employee %}
+                        My Profile
+                    {% else %}
+                        {{ employee.fullName }}
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="col-sm-3 text-right">
+                {% if "ROLE_CUSTOMER" in app.user.roles or "ROLE_VENDOR" in app.user.roles or "ROLE_ADMIN" in app.user.roles %}
+                    <p>
+                        {% if employee.hasCertificates %}
+                            <a class="btn btn-lg btn-shadow"
+                               href="{{ path('index_employee_certificate', {'employee': employee.id}) }}">
+                                Certificates
+                            </a>
+                        {% else %}
+                            <button class="btn btn-lg btn-link" disabled>
+                                No Certificates yet.
+                            </button>
+                        {% endif %}
+                    </p>
+                {% endif %}
+                <p class="">
+                    <a href="{{ path('try_lock_resource',{resource:"employee",id:employee.id,path:"employee_edit_profile"}) }}"
+                       class="btn btn-lg btn-light btn-shadow ajax-link" data-op="redirect">
+                        Edit
+                    </a>
+                </p>
+
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <p>
+                        <a id="{{ employee.id }}_delete"
+                           href="{{ path('try_delete_resource',{resource:"employee",id:employee.id}) }}"
+                           class="ajax-link btn btn-lg btn-shadow btn-red" data-op="change">Delete</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="container-fluid">
+                    {% if "ROLE_EMPLOYEE" in app.user.roles %}
+                        <div class="row">
+                            <p class="col-sm-6 profile-header">
+                                Name
+                            </p>
+                            <p class="col-sm-6">
+                                {{ employee.fullName }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Email
+                        </p>
+
+                        <p class="col-sm-6">
+                            {{ employee.email }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <hr>
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Last four of SSN
+                        </p>
+                        <p class="col-sm-6">
+                            {{ employee.lastFourOfSSN }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Birthday
+                        </p>
+                        <p class="col-sm-6">
+                            {{ employee.birthday | date('d M Y') }}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Phone Number
+                        </p>
+                        <p class="col-sm-6">
+                            {{ employee.phone }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if employee.vendor and (app.user == employee or "ROLE_ADMIN" in app.user.roles) %}
+            {% set vendor = employee.vendor %}
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <hr>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <p class="col-sm-6 profile-header">
+                                Vendor Contact Email
+                            </p>
+
+                            <p class="col-sm-6">
+                                {{ vendor.email }}
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="col-sm-6 profile-header">
+                                Vendor Name
+                            </p>
+
+                            <p class="col-sm-6">
+                                {{ vendor.fullname }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="last"></div>
+    </div>
+{% endblock %}

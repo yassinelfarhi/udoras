@@ -1,0 +1,181 @@
+{% extends '::base.html.twig' %}
+
+{% set is_admin = "ROLE_ADMIN" in app.user.roles %}
+
+{% block head %}
+    {% stylesheets
+    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less' %}
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset_url }}" type="text/css" rel="stylesheet"
+          media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+
+{#<style type="text/css">
+    table.gridtable {
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border: 1px #666666;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table.gridtable th {
+        padding: 8px;
+        border: 1px solid #666666;
+        background-color: #dedede;
+    }
+
+    table.gridtable td {
+        padding: 8px;
+        border: 1px solid #666666;
+        background-color: #ffffff;
+    }
+</style>#}
+{% block body %}
+    <style type="text/css">
+        table, tr, td, th, tbody, thead, tfoot {
+            page-break-inside: avoid !important;
+        }
+    </style>
+    <main>
+        <div style="text-align: center;">
+            <h2>
+                <b>Training Report</b>
+            </h2>
+        </div>
+
+        {% if hasFilter %}
+            <table class="table">
+                <thead>
+                <tr>
+                    {% for key, val in filterConditions|filter_conditions %}
+                        {% if val != null %}
+                            <th>
+                                {% if key == 'vendors' %}
+                                    Vendor
+                                {% else %}
+                                    {{ key|split('_')|join(' ')|spaces|capitalize }}
+                                {% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for key, val in filterConditions|filter_conditions %}
+
+                        {% if val != null and val is not iterable %}
+                            <td>
+                                {% if key == 'vendors' and val == 1 %}
+                                    No vendor
+                                {% else %}
+                                    {{ val|cut_long|nl2br }}
+                                {% endif %}
+                            </td>
+                        {% elseif val is iterable %}
+                            <td>
+                                {% for sub_key, sub_val in val %}
+                                    {% if loop.index == 2 %}
+                                        -
+                                    {% endif %}
+                                    {{ sub_val }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                {% if is_admin %}
+                    <th>Customer</th>
+                {% endif %}
+                <th>Vendor</th>
+                <th>Employee</th>
+                <th>Trainings</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Expires</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for trainingState in trainingReports %}
+                {% set access = trainingState.access %}
+                {% set employee = access.employee %}
+                {% set training = trainingState.training %}
+                {% set customer = training.customer %}
+                {% if access.request and access.request.vendor %}
+                    {% set vendor = access.request.vendor %}
+                {% else %}
+                    {% set vendor = null %}
+                {% endif %}
+                <tr>
+                    {% if is_admin %}
+                        <td>
+                            {% if customer %}
+                                {% if customer.deletedAt %}
+                                    <span class="text-danger">{{ customer.company }} (deleted)</span>
+                                {% else %}
+                                    {{ customer.company }}
+                                {% endif %}
+                            {% else %}
+                                No company
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    <td>
+                        {% if vendor %}
+                            {% if vendor.deletedAt %}
+                                <span class="text-danger">{{ vendor.fullName }} (deleted)</span>
+                            {% else %}
+                                {{ vendor.fullName }}
+                            {% endif %}
+                        {% else %}
+                            No vendor
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if employee %}
+                            {% if employee.deletedAt %}
+                                <span class="text-danger">{{ employee.fullname }} (deleted)</span>
+                            {% else %}
+                                {{ employee.fullname }}
+                            {% endif %}
+                        {% else %}
+                            No employee
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if training %}
+                            {% if training.deletedAt %}
+                                <span class="text-danger">{{ training.title|training_name_format|nl2br }} (deleted)</span>
+                            {% else %}
+                                {{ training.title|training_name_format|nl2br }}
+                            {% endif %}
+                        {% else %}
+                            No training
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        {{ trainingState.passedStatus|training_status }}
+                    </td>
+                    <td>
+                        {{ get_date_end(trainingState) }}
+                    </td>
+                    <td>
+                        {{ get_date_expires(trainingState) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </main>
+{% endblock %}

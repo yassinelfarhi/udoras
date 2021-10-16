@@ -1,0 +1,32 @@
+<div class="modal-content payment">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title text-center">Pay for the Training</h4>
+    </div>
+
+    {{ form_start(form, {action: path('fs_udoras_payments_prepare', {link: trainingProgram.link})}) }}
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ form_widget(form.card_number) }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_widget(form.date) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_widget(form.cvc) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn ajax-submit">
+                Pay $<span class="total-price"
+                           data-default="{{ trainingProgram.price }}">{{ trainingProgram.price * amount }}</span>
+            </button>
+        </div>
+    {{ form_end(form) }}
+</div>

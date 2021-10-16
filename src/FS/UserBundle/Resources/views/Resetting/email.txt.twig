@@ -1,0 +1,20 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block subject %}
+{% autoescape false %}
+    Resetting password for {{ user.username }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+    For reset your password go to {{ confirmationUrl }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+<div style="text-align:center">
+    <img src="{{ absolute_url(asset('bundles/fsudoras/images/logo-copy.png')) }}" alt="Logo"/>
+    <div>To reset your password go to {{ confirmationUrl }}</div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+<div class="image col-sm-12 text-center">
+    <div class="row">
+        <img src="{{ slide.slideData }}"
+             style="top:{{ slide.extraFields['top'] }}%;width:{{ slide.extraFields['width'] }}%;height:{{ slide.extraFields['height'] }}%">
+    </div>
+    {% if slide.extraFields['audio'] is defined %}
+        <div class="row narration">
+            <audio controls autoplay>
+                <source src="{{ slide.extraFields['audio'] }}">
+            </audio>
+        </div>
+    {% endif %}
+</div>

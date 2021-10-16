@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col-sm-12 links">
+        {% if linksPagination.items is empty %}
+            <div class="col-sm-12">
+                <p>No Free Training links</p>
+            </div>
+        {% else %}
+            {% for link in linksPagination %}
+                <div class="col-sm-12 link">
+                    <div class="col-sm-12">
+                        <p class="col-sm-4">
+                            Link:
+                        </p>
+                        <p class="col-sm-8">
+                            <a href="{{ path('training_program_free_access', {'link': link.link }) }}">
+                                {{ url('training_program_free_access', {'link': link.link }) }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-sm-12">
+                        <p class="col-sm-4">
+                            Trainings used:
+                        </p>
+                        <p class="col-sm-8">
+                            {{ link.trainingsUsed }} / {{ link.trainings }}
+                        </p>
+                    </div>
+                    {% if link.comment %}
+                        <div class="col-sm-12">
+                            <p class="col-sm-4">
+                                Comment:
+                            </p>
+                            <p class="col-sm-8">
+                                {{ link.comment }}
+                            </p>
+                        </div>
+                    {% endif %}
+                    {% if edit %}
+                        <div class="col-sm-12">
+                            <p class="col-sm-2">
+                                <a class="btn btn-red ajax-modal"
+                                   href="{{ path('admin_link_delete_confirmation', {'trainingProgram': trainingProgram.id, 'link': link.id}) }}">
+                                    Delete
+                                </a>
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="text-center font-normal">
+                {{ knp_pagination_render(linksPagination) }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if edit %}
+    <div class="row">
+        <div class="col-sm-12 new-link-form-place"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <a class="btn btn-link new-link"
+               href="{{ path('admin_add_link_to_training_program', {trainingProgram: trainingProgram.id}) }}">
+                {% image '@FSTrainingProgramsBundle/Resources/public/img/plus.svg' %}
+                <img src="{{ asset_url }}"/>
+                {% endimage %}
+                Add new
+            </a>
+        </div>
+    </div>
+{% endif %}

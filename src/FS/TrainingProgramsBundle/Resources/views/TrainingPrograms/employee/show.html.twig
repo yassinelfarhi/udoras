@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="profile">
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{{ path('index_employee') }}" class="btn btn-back">Back</a>
+            </div>
+            <div class="col-sm-4">
+                <h3 class="text-center" style="margin:0">{{ trainingProgram.title|training_name_format|nl2br }}</h3>
+                <h5 class="text-center">
+                    Training
+                </h5>
+            </div>
+            <div class="col-sm-4 text-right">
+                {% include 'FSTrainingProgramsBundle:TrainingPrograms/employee:trainingAction.html.twig' %}
+            </div>
+        </div>
+        <div class="row info-body">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Passing %
+                        </p>
+                        <p class="col-sm-6">
+                            {{ trainingProgram.passing }}%
+                        </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Price
+                        </p>
+                        <p class="col-sm-6">
+                            {% if freeLink is defined %}
+                                Free
+                            {% else %}
+                                ${{ trainingProgram.price }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% include 'FSTrainingProgramsBundle:TrainingPrograms/show:link.html.twig' %}
+                    {% if access.trainingState %}
+                        {% if access.trainingState.passedStatus == constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_PASSED') %}
+                            <div class="row">
+                                <p class="col-sm-6 profile-header">
+                                    My Result
+                                </p>
+                                <p class="col-sm-6 text-success">
+                                    {{ access.trainingState.ratio }}%
+                                </p>
+                            </div>
+                        {% elseif access.trainingState.passedStatus != constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_IN_PROGRESS') %}
+                            <div class="row">
+                                <p class="col-sm-6 profile-header">
+                                    My Result
+                                </p>
+                                <p class="col-sm-6">
+                                    {{ access.trainingState.ratio }}%
+                                </p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="last"></div>
+    </div>
+{% endblock %}
+
+{% block foot_script %}
+    {{ parent() }}
+
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+
+    {% javascripts
+    '@FSTrainingProgramsBundle/Resources/public/js/payment/custom_stripe.js'
+    '@FSTrainingProgramsBundle/Resources/public/js/book-training.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock foot_script %}

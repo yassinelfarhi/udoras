@@ -1,0 +1,227 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: "@FSJsExtraBundle/Resources/config/services.xml" }
+    - { resource: "@FSBasicBundle/Resources/config/services.xml" }
+    - { resource: "@FSUserBundle/Resources/config/services.xml" }
+    - { resource: "@FSUdorasBundle/Resources/config/services.xml" }
+    - { resource: "@FSTrainingProgramsBundle/Resources/config/services.xml" }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    serializer:
+        enable_annotations: true
+        enabled: true
+    trusted_proxies: ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+    translator: ~
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+        node_port: "%node.port%"
+        stripe_public_key: "%stripe_public_key%"
+
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                auto_mapping: true
+                filters:
+                    softdeleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    auth_mode: "%mailer_auth_mode%"
+    encryption: "%mailer_encryption%"
+    spool:
+      type: file
+      path: "%kernel.root_dir%/spool"
+
+assetic:
+    filters:
+        less:
+            node: "%node.base_path%"
+            node_paths: "%node.paths%"
+            apply_to: "\.less$"
+        cssrewrite: ~
+
+mopa_bootstrap:
+    form:
+        horizontal: true
+        checkbox_label: 'widget' # default is both (label|widget|both)
+        render_fieldset: false
+        show_legend:  false
+        horizontal_label_class: col-sm-12
+        horizontal_input_wrapper_class: col-sm-12
+
+    menu: ~
+
+    icons:
+        icon_set: glyphicons
+        shortcut: icon
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: FS\UserBundle\Entity\User
+    service:
+        user_manager: pugx_user_manager
+        mailer: fos_user.mailer.twig_swift
+    from_email:
+        address: "%notification_email%"
+        sender_name: uDoras
+    registration:
+        confirmation:
+            enabled: true
+
+pugx_multi_user:
+    users:
+        admin:
+            entity:
+                class: FS\UserBundle\Entity\Admin
+        customer:
+            entity:
+                class: FS\UserBundle\Entity\Customer
+            registration:
+                form:
+                    type: FS\UserBundle\Form\Type\RegistrationCustomerType
+                    name: fs_user_registration_customer_form
+                    validation_groups:  [Default, CustomerRegistration, CustomRegistration]
+                template: FSUserBundle:RegistrationCustomer:register.html.twig
+        vendor:
+            entity:
+                class: FS\UserBundle\Entity\Vendor
+            registration:
+                form:
+                    type: FS\UserBundle\Form\Type\RegistrationVendorType
+                    name: fs_user_registration_vendor_form
+                    validation_groups:  [Default, VendorRegistration, CustomRegistration]
+                template: FSUserBundle:RegistrationVendor:register.html.twig
+        employee:
+            entity:
+                class: FS\UserBundle\Entity\Employee
+            registration:
+                form:
+                    type: FS\UserBundle\Form\Type\RegistrationEmployeeType
+                    name: fs_user_registration_employee_form
+                    validation_groups:  [Default, EmployeeRegistration, CustomRegistration]
+                template: FSUserBundle:RegistrationEmployee:register.html.twig
+
+stof_doctrine_extensions:
+    orm:
+        default:
+            timestampable: true
+            blameable: true
+            uploadable: true
+
+# KNP Paginator Configuration
+knp_paginator:
+    page_range: 5                    # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true                # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: FSUdorasBundle::pagination.html.twig
+
+genemu_form:
+    date: ~
+    select2: ~
+    autocomplete: ~
+
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://localhost
+    session:
+            client: default
+            prefix: "udoras:ses"
+    doctrine:
+        metadata_cache:
+            client: default
+            entity_manager: [default, cached]
+            namespace: "%kernel.root_dir%"
+        result_cache:
+              client: default
+              entity_manager: [default, cached]
+              namespace: "%kernel.root_dir%"
+        query_cache:
+              client: default
+              entity_manager: [default, cached]
+              namespace: "%kernel.root_dir%"
+
+
+
+sc_datetimepicker:
+    picker: ~
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+
+knp_snappy:
+    pdf:
+        enabled: true
+        binary: "%kernel.root_dir%/../%wkhtmltopdf_path%"
+        options: []
+    image:
+        enabled: true
+        binary: "%kernel.root_dir%/../%wkhtmltoimage_path%"
+        options: []
+    temporary_folder: "%kernel.cache_dir%/snappy"

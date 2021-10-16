@@ -1,0 +1,36 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     symfony
+    database_user:     root
+    database_password: ~
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+    mailer_encryption: ssl
+    mailer_auth_mode: login
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # Node paths
+    node.base_path: /usr/local/bin/node
+    node.paths:
+        - '/usr/local/lib/node:/usr/local/lib/node_modules:/root/node_modules'
+    node.port: 8005
+
+    # notification email
+    notification_email: notification@uDoras.loc
+
+    stripe_secret_key: sk_test_9bsQWhqZmyeZmSBJtHK1g5K8
+    stripe_public_key: pk_test_6ekgMaKo2KFPc0H2AcqBGRWc
+
+    wkhtmltopdf_path: vendor/bin/wkhtmltopdf-amd64
+    wkhtmltoimage_path: vendor/bin/wkhtmltoimage-amd64

@@ -1,0 +1,30 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+        <b class="modal-title text-center">Exit "Edit Presentation" mode</b>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">Do you want to save your progress before exiting?</p>
+        <br/>
+        <br/>
+        <br/>
+        <p class="text-center">
+            <a class="btn btn-grey close-modal" data-dismiss="modal" href="#">Cancel</a>
+            <a class="btn btn-grey" href="{{ path('training_program_redirect', {trainingProgram:program.id}) }}">No</a>
+            <a class="btn save-and-exit"
+               href="#" data-redirect="{{ path('training_program_redirect', {trainingProgram:program.id}) }}">
+                Yes
+            </a>
+        </p>
+    </div>
+    <script>
+        jQuery(function ($) {
+            $('.save-and-exit').click(function () {
+                var ref = $(this).data('redirect');
+                $('.save').trigger('click', [ref]);
+                $('.close-modal').trigger('click');
+            });
+        });
+    </script>
+</div>

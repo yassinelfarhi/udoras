@@ -1,0 +1,15 @@
+{% if employees|length == 0 %}
+    <p>No available employees</p>
+{% else %}
+    {% for employee in employees  %}
+        <div class="row item employee">
+            <div class="col-sm-10">
+                {{ employee.fullName }}
+            </div>
+            <div class="col-sm-2 employee-checkbox">
+                <input type="checkbox" class="request" id="employee_{{ employee.id }}" value="{{ employee.id }}">
+                <label class="checkbox-style" for="employee_{{ employee.id }}"></label>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

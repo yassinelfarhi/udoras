@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {{ form_stylesheet(form) }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <a href="{{ path('index_vendor_profile', {'vendor': vendor.id}) }}"
+               class="btn btn-grey btn-lg btn-back">Back</a>
+        </div>
+        <div class="col-sm-6">
+        {% if vendor == app.user %}
+            <h2 class="text-center">My profile</h2>
+        {% else %}
+            <h2 class="text-center">Edit {{ vendor.fullName }}</h2>
+        {% endif %}
+
+        {{ form_start(form, {action: path('vendor_edit_profile',{vendor:vendor.id})}) }}
+        <div id="form-content">
+            <div class="styled-select">
+                {{ form_widget(form) }}
+            </div>
+            <input class="btn btn-lg btn-tall btn-shadow pull-right" id="submit-form" type="submit" value="Save"/>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    </div>
+{% endblock %}
+
+

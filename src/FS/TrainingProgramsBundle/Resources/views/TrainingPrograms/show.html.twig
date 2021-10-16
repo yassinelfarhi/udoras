@@ -1,0 +1,127 @@
+{% if app.session.has('training-return') %}
+    {% set link = app.session.get('training-return') %}
+{% elseif is_granted('ROLE_ADMIN') or is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('customer_training_programs', {customer: trainingProgram.customer.id}) %}
+{% else %}
+    {% set link = '/' %}
+{% endif %}
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/links.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    <div class="profile">
+        <div class="row">
+            <div class="col-sm-3">
+                <a href="{{ link }}" class="btn btn-back">Back</a>
+            </div>
+            <div class="col-sm-6">
+                <h3 class="text-center" style="margin:0">{{ trainingProgram.title|training_name_format|nl2br }}</h3>
+                <h5 class="text-center">
+                    {% if "ROLE_ADMIN" in app.user.roles %}
+                        Presentation
+                    {% else %}
+                        Training
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="col-sm-3 text-right">
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <p>
+                        <a href="{{ path('try_lock_resource',{resource:"trainingProgram",id:trainingProgram.id,path:"admin_training_program_edit"}) }}"
+                           class="btn btn-lg btn-shadow ajax-link" data-op="redirect">
+                            Edit Training info
+                        </a>
+                    </p>
+                {% endif %}
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <p>
+                        <a class="btn btn-lg btn-shadow"
+                           href="{{ path('show_training_program_slide', {'link': trainingProgram.link}) }}">
+                            View
+                        </a>
+                    </p>
+                    <p>
+                        <a href="{{ path('try_lock_resource',{resource:"trainingProgram",id:trainingProgram.id,path:"training_program_create_presentation"}) }}"
+                           class="btn btn-lg btn-light btn-shadow ajax-link" data-op="redirect">
+                            Edit
+                        </a>
+                    </p>
+                {% else %}
+                    <p>
+                        <a class="btn btn-lg btn-shadow"
+                           href="{{ path('show_training_program_slide', {'link': trainingProgram.link}) }}">
+                            Open
+                        </a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row info-body">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="container-fluid">
+                    {# Link and Passing positions for admin and other users #}
+                    {% if "ROLE_ADMIN" in app.user.roles %}
+                        {% include 'FSTrainingProgramsBundle:TrainingPrograms/show:link.html.twig' %}
+                        {% include 'FSTrainingProgramsBundle:TrainingPrograms/show:passing.html.twig' %}
+                    {% else %}
+                        {% include 'FSTrainingProgramsBundle:TrainingPrograms/show:passing.html.twig' %}
+                        <br>
+                        {% include 'FSTrainingProgramsBundle:TrainingPrograms/show:link.html.twig' %}
+                    {% endif %}
+
+                    {% if "ROLE_ADMIN" in app.user.roles %}
+                        <div class="row">
+                            <p class="col-sm-4 profile-header">
+                                Price
+                            </p>
+                            <p class="col-sm-8">
+                                {{ trainingProgram.price }}$
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    {% if trainingProgram.certificateValidMonths is not empty %}
+                        <div class="row">
+                            <p class="col-sm-4 profile-header">
+                                Certificate valid for
+                            </p>
+                            <p class="col-sm-8">
+                                {{ trainingProgram.certificateValidMonths }} months
+                            </p>
+                        </div>
+                    {% elseif trainingProgram.certificateValidUntil is not empty %}
+
+                        <div class="row">
+                            <p class="col-sm-4 profile-header">
+                                Certificate valid until
+                            </p>
+                            <p class="col-sm-8">
+                                {{ trainingProgram.certificateValidUntil|date("d M Y") }}
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+                <hr>
+            </div>
+        </div>
+        {% if "ROLE_ADMIN" in app.user.roles %}
+            <div class="row">
+                <div class="links col-sm-6 col-sm-offset-3">
+                    {% include 'FSTrainingProgramsBundle:Links:links.html.twig' with {
+                    'trainingProgram': trainingProgram,
+                    'linksPagination': linksPagination,
+                    'edit': false
+                    } %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="last"></div>
+    </div>
+{% endblock %}

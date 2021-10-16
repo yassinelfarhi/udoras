@@ -1,0 +1,84 @@
+{% set search_field = form.title %}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <main>
+        <div class="users-table">
+            {% if paginator is empty %}
+                <p>No Certificates</p>
+            {% else %}
+                <table class="table font-normal">
+                    <thead>
+                    <tr>
+                        <th class="link-padding">Employee</th>
+                        <th class="link-padding">Company Name</th>
+                        <th class="link-padding" width="30%">Training Title</th>
+                        <th width="350">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for trainingState in paginator %}
+                        {% set access = trainingState.access %}
+                        {% set employee = access.employee %}
+                        {% set training = trainingState.training %}
+                        {% set customer = training.customer %}
+                        <tr>
+                            <td>
+                                {% if employee %}
+                                    {% if employee.deletedAt %}
+                                        <span class="text-danger link-padding">{{ employee.fullname }} (deleted)</span>
+                                    {% else %}
+                                        <a href="{{ path('index_employee_profile',{employee:employee.id}) }}">
+                                            {{ employee.fullname }}
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="link-padding">No employee</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if customer %}
+                                    {% if customer.deletedAt %}
+                                        <span class="text-danger link-padding">{{ customer.company }} (deleted)</span>
+                                    {% else %}
+                                        <a href="{{ path('index_customer_profile',{customer:customer.id}) }}">{{ customer.company }}</a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="link-padding">No company</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if training %}
+                                    {% if training.deletedAt %}
+                                        <span class="text-danger link-padding">{{ training.title|training_name_format|nl2br }}
+                                            (deleted)</span>
+                                    {% else %}
+                                        <a href="{{ path('show_training_program',{link:training.link}) }}">
+                                            {{ training.title|training_name_format|nl2br }}
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="link-padding">No training</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a class="btn btn-in-table btn-yellow" style="margin-right:25px"
+                                   href="{{ path('employee_certificate', {'employeeTrainingState': trainingState.id}) }}">
+                                    View
+                                </a>
+                                <a class="btn btn-in-table"
+                                   href="{{ path('employee_certificate_download', {'trainingStateId': trainingState.id}) }}">
+                                    Download
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <div class="text-center font-normal">
+                {{ knp_pagination_render(paginator) }}
+            </div>
+        </div>
+    </main>
+{% endblock %}

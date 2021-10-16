@@ -1,0 +1,29 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h4>Successful Booking</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <p class="text-center">
+            Now you can complete the training {{ trainingProgram.title|training_name_format|nl2br }}.
+        </p>
+    </div>
+
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-default pull-left" data-dismiss="modal">
+                    Close
+                </button>
+                <a class="btn btn-primary"
+                   href="{{ path('show_training_program', {link: trainingProgram.link}) }}">
+                    Open Training
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+{% extends "base.html.twig" %}
+{% block navbar %}
+    {% include "@FSUser/registrationHeader.html.twig" %}
+{% endblock navbar %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <form action="{{ path("fos_user_security_check") }}" method="post" class="form-horizontal tall">
+                        {% if error %}
+                            <div class="alert alert-danger {% if error.messageKey ==  "Account is disabled." %}confirmation-resend{% endif %}">
+
+                                {% if error.messageKey ==  "Account is disabled." %}
+                                    <div>
+                                        Your account is not confirmed yet.
+                                        Please find the confirmation letter in your email.
+                                    </div>
+                                    <a id="confirm-resend" href="#">Click here to re-send the confirmation
+                                        letter.</a>
+                                    <script>
+                                        $(function () {
+                                            $('#confirm-resend').click(function () {
+                                                var $this = $('.confirmation-resend');
+                                                $.post('{{ path('email_confirmation_resend') }}', {user: "{{ last_username }}"}, function () {
+                                                    $this.removeClass('alert-danger');
+                                                    $this.addClass('alert-success');
+                                                    $this.html('Confirmation email has been sent');
+                                                });
+
+                                                return false;
+                                            });
+                                        })
+                                    </script>
+                                {% else %}
+                                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <input class="form-control" type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-12 control-label">Email</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" type="text" id="email" name="_username"
+                                       value="{{ last_username }}" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-12 control-label">Password</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" type="password" id="password" name="_password"
+                                       required="required"/>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="_remember_me" id="remember_me">
+                                        <span class="checkbox-style"></span>
+                                        Remember me
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="checkbox text-right">
+                                    <label>
+                                        <a id="resetting" class="ajax-modal fade-out"
+                                           href="{{ path('fos_user_resetting_request', {'email': last_username}) }}">
+                                            Forgot password?
+                                        </a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-center tall">
+                            <input class="btn btn-lg btn-shadow" type="submit" id="_submit" name="_submit"
+                                   value="LOGIN"/>
+                        </div>
+                        <p class="text-center tall">
+                            Don’t have an account?
+                        </p>
+                        <p class="text-center tall">
+                            <a href="{{ path('fs_basic_select_registration') }}" class="sign-up fade-out">SIGN UP</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

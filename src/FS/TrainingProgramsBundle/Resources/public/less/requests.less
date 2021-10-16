@@ -1,0 +1,53 @@
+@import "../../../../JsExtraBundle/Resources/public/less/_colors";
+
+.requests {
+
+  .modal-body {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .column + .column {
+    border-left: 1px solid #e5e5e5;
+  }
+
+  .vendors {
+    .vendor-ajax-link {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .vendor-checkbox {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      .checkbox-style {
+        top: 8px;
+      }
+    }
+  }
+
+  .employees {
+    .item {
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      .checkbox-style {
+        top: 0;
+      }
+    }
+  }
+
+  .item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: @link-hover-background;
+    }
+  }
+
+  .checked {
+    background: @link-hover-background;
+  }
+
+}

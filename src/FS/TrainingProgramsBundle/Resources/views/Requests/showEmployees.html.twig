@@ -1,0 +1,27 @@
+<div class="modal-content requests">
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h4>Employees</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12 column employees">
+                {% include 'FSTrainingProgramsBundle:Requests:updateEmployees.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">
+            Cancel
+        </button>
+        <a class="btn create-training-requests" disabled="disabled"
+           href="{{ path('fs_training_programs_requests_create_employees_accesses', {'trainingProgram': trainingProgram.id}) }}">
+            Send request
+        </a>
+    </div>
+</div>

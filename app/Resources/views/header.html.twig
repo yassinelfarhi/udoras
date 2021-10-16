@@ -1,0 +1,108 @@
+<header>
+    <div class="container-fluid">
+        {% if not app.user %}
+            <script>
+                $(document).ready(function () {
+                    if (window.location.hash) {
+                        var hash = window.location.hash.substring(1);
+                        if (hash == 'login') {
+                            $('#login').trigger('click');
+                        }
+                    }
+                });
+
+            </script>
+            <div class="row">
+                <div class="col-md-2 col-md-offset-10">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a id="login" class="btn btn-default btn-header ajax-modal" data-op="redirect"
+                               href="{{ path('fos_user_security_login') }}">Login</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('fs_basic_select_registration') }}" class="btn btn-default btn-header">
+                                Register
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <div class="container">
+                {% if search_field is defined %}
+                    <form method="GET" class="form-inline {% if is_granted('ROLE_ADMIN') %}at-bottom{% endif %}" id="filter-custom-form">
+                        {{ form_widget(search_field) }}
+                        <button class="submit" type="submit" name="submit-filter">
+                            {% image '@FSUdorasBundle/Resources/public/images/icon-search.svg' %}
+                            <img src="{{ asset_url }}" alt="Search"/>
+                            {% endimage %}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if header_extra is defined %}
+                    <div id="header_extra" {% if is_granted('ROLE_ADMIN') %}class="at-bottom"{% endif %}>
+                        {{ header_extra }}
+                    </div>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% if not hideMenu|default(false) %}
+                        <div class="key-menu key-4">
+                            {% image '@FSUdorasBundle/Resources/public/images/key-4.svg' %}
+                            <img src="{{ asset_url }}" alt="Key"/>
+                            {% endimage %}
+                            {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:adminMenu') }}
+                        </div>
+                    {% endif %}
+                    {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:logoutMenu',{'user': app.user}) }}
+                {% elseif is_granted('ROLE_CUSTOMER') %}
+                    {% if not hideMenu|default(false) %}
+                        <div class="key-menu key-3">
+                            {% image '@FSUdorasBundle/Resources/public/images/key-3.svg' %}
+                            <img src="{{ asset_url }}" alt="Key"/>
+                            {% endimage %}
+                            {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:customerMenu', {
+                                'customer': app.user.id
+                            }) }}
+                        </div>
+                    {% endif %}
+                    {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:profileLogoutMenu',{
+                        'route': 'index_customer_profile',
+                        'parameterName': 'customer',
+                        'user': app.user
+                    }) }}
+                {% elseif is_granted('ROLE_VENDOR') %}
+                    {% if not hideMenu|default(false) %}
+                        <div class="key-menu key-2">
+                            {% image '@FSUdorasBundle/Resources/public/images/key-2.svg' %}
+                            <img src="{{ asset_url }}" alt="Key"/>
+                            {% endimage %}
+                            {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:vendorMenu') }}
+                        </div>
+                    {% endif %}
+                    {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:profileLogoutMenu',{
+                        'route': 'index_vendor_profile',
+                        'parameterName': 'vendor',
+                        'user': app.user
+                    }) }}
+                {% elseif is_granted('ROLE_EMPLOYEE') %}
+                    {% if not hideMenu|default(false) %}
+                        <div class="key-menu key-2">
+                            {% image '@FSUdorasBundle/Resources/public/images/key-2.svg' %}
+                            <img src="{{ asset_url }}" alt="Key"/>
+                            {% endimage %}
+                            {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:employeeMenu',{
+                                'parameterName': 'employee',
+                                'user': app.user
+                            }) }}
+                        </div>
+                    {% endif %}
+                    {{ mopa_bootstrap_menu('FSUdorasBundle:Builder:profileLogoutMenu',{
+                        'route': 'index_employee_profile',
+                        'parameterName': 'employee',
+                        'user': app.user
+                    }) }}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</header>

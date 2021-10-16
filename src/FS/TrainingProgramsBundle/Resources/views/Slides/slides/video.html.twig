@@ -1,0 +1,7 @@
+<div class="video col-sm-12 text-center">
+    <video controls
+           style="top:{{ slide.extraFields['top'] }}%;height:{{ slide.extraFields['height'] }}%;width: {{ slide.extraFields['width'] }}%">
+        <source src="{{ slide.slideData }}">
+        <source src="{{ slide.slideData|replace({'.webm': '.mp4'}) }}">
+    </video>
+</div>

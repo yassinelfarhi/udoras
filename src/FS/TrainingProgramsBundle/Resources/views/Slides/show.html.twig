@@ -1,0 +1,98 @@
+{% extends '::base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/slides.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid slide">
+        <div class="row status-row">
+            <div class="col-sm-3 col-sm-offset-1 logo">
+                {% image '@FSUdorasBundle/Resources/public/images/logo-copy.png' %}
+                <img src="{{ asset_url }}" alt="Logo"/>
+                {% endimage %}
+            </div>
+            <div class="col-sm-4">
+                <div class="progress-text text-center">
+                    {{ slide.realNum }}/{{ numberOfSlides }}
+                </div>
+                <div class="progress-bar">
+                    <span style="width: {{ slide.realNum / numberOfSlides * 100 }}%"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 content main-slide">
+                {% if slide.slideType == constant('FS\\TrainingProgramsBundle\\Entity\\Slide::SLIDE_TYPE__TEXT') %}
+                    {% include 'FSTrainingProgramsBundle:Slides/slides:text.html.twig' with {'slide': slide} %}
+                {% elseif slide.slideType == constant('FS\\TrainingProgramsBundle\\Entity\\Slide::SLIDE_TYPE__IMAGE') %}
+                    {% include 'FSTrainingProgramsBundle:Slides/slides:image.html.twig' with {'slide': slide} %}
+                {% elseif slide.slideType == constant('FS\\TrainingProgramsBundle\\Entity\\Slide::SLIDE_TYPE__QUESTION') %}
+                    {% include 'FSTrainingProgramsBundle:Slides/slides:question.html.twig' with {'slide': slide} %}
+                {% elseif slide.slideType == constant('FS\\TrainingProgramsBundle\\Entity\\Slide::SLIDE_TYPE__AUDIO') %}
+                    {% include 'FSTrainingProgramsBundle:Slides/slides:audio.html.twig' with {'slide': slide} %}
+                {% elseif slide.slideType == constant('FS\\TrainingProgramsBundle\\Entity\\Slide::SLIDE_TYPE__VIDEO') %}
+                    {% include 'FSTrainingProgramsBundle:Slides/slides:video.html.twig' with {'slide': slide} %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row buttons-row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="row">
+                    <div class="col-sm-4 text-left">
+                        <a class="btn btn-lg close-presentation"
+                           href="{{ path('show_training_program', {'link': trainingProgram.link}) }}">
+                            Close Presentation
+                        </a>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <h5 class="time-limit"
+                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_CUSTOMER') %}
+                                    style="display: block"
+                                {% endif %} >
+                            {% if slide.timeLimit %}
+                                Time limit: {{ slide.timeLimit | minutes_seconds }}
+                            {% else %}
+                                No time limit
+                            {% endif %}
+                        </h5>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        {% if nextSlide %}
+                            <a class="btn btn-lg next-slide"
+                               href="{{ path('show_training_program_slide', {
+                                   'link': trainingProgram.link,
+                                   'slide': nextSlide.id
+                               }) }}">
+                                Next Slide
+                                <i class="glyphicon glyphicon-menu-right"></i>
+                            </a>
+                        {% else %}
+                            {% if hasLastTest %}
+                                <a class="btn btn-lg next-slide"
+                                   href="{{ path('training_program_test', {'link': trainingProgram.link}) }}">
+                                    Next Slide
+                                    <i class="glyphicon glyphicon-menu-right"></i>
+                                </a>
+                            {% else %}
+                                <a class="btn btn-lg next-slide"
+                                   href="{{ path('show_training_program', {'link': trainingProgram.link}) }}">
+                                    Finish Training
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block foot_script %}
+        {{ parent() }}
+    {% endblock foot_script %}
+{% endblock body %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {{ form_stylesheet(form) }}
+{% endblock head_style %}
+{% block content %}
+    <main>
+        <div class="row">
+            <div class="col-sm-2">
+                <a class="btn btn-lg btn-back" href="{{ path('index_admin') }}">
+                    Back
+                </a>
+            </div>
+            <div class="col-sm-6 col-sm-offset-1">
+                <h2 class="text-center">Create Customer</h2>
+                {{ form_start(form, {action: path('admin_create_customer')}) }}
+                <div id="form-content">
+                    <div class="styled-select">
+                        {% include "@FSUdoras/FormFormat/customer.html.twig" %}
+                    </div>
+                    <input class="btn btn-lg btn-tall btn-shadow pull-right ajax-submit" id="submit-form" type="submit"
+                           value="Create Customer"/>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </main>
+    {#<div id="ajax-modal" class="modal in animated shake" tabindex="-1" style="display: none;" aria-hidden="false"></div>#}
+{% endblock content %}

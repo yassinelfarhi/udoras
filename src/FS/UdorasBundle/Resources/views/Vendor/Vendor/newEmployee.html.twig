@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% set link = path('fs_basic_homepage') %}
+{% if is_granted("ROLE_ADMIN") %}
+    {% set link = path('admin_employee') %}
+{% elseif is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('index_customer') %}
+{% elseif is_granted('ROLE_VENDOR') %}
+    {% set link = path('index_vendor') %}
+{% endif %}
+
+{% block head_bottom %}
+    {{ form_stylesheet(form) }}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-2">
+            <a class="btn btn-lg btn-back" href="{{ link }}">
+                Back
+            </a>
+        </div>
+        <div class="col-sm-6 col-sm-offset-1">
+            <h2 class="text-center">Create Employee</h2>
+
+            {{ form_start(form, {action: path('vendor_create_employee')}) }}
+            <div id="form-content">
+                <div class="styled-select">
+                    {% include "@FSUdoras/FormFormat/employee.html.twig" %}
+                </div>
+                <input class="btn btn-lg btn-tall btn-shadow pull-right ajax-submit" id="submit-form" type="submit"
+                       value="Create Employee"/>
+            </div>
+            {{ form_end(form) }}
+            {{ form_javascript(form.birthday) }}
+        </div>
+    </div>
+{% endblock content %}

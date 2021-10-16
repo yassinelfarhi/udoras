@@ -1,0 +1,20 @@
+{% set link = path('fs_basic_homepage') %}
+{% if is_granted("ROLE_ADMIN") %}
+    {% set link = path('index_admin') %}
+{% elseif is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('index_customer') %}
+{% endif %}
+
+{{ form_stylesheet(form) }}
+{{ form_start(form, {action: path('customer_create_vendor')}) }}
+<div id="form-content">
+    <div class="styled-select">
+        {% include "@FSUdoras/FormFormat/vendor.html.twig" %}
+    </div>
+    <input class="btn btn-lg btn-shadow btn-tall pull-right ajax-submit" id="submit-form" type="submit"
+           value="Create Vendor"/>
+</div>
+{{ form_end(form) }}
+<script>
+    $('input,select').trigger('change');
+</script>

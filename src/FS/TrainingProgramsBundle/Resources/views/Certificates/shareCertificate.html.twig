@@ -1,0 +1,52 @@
+<div class="modal-content share-certificate">
+    <form method="POST"
+          action="{{ path('employee_certificate_share', {'trainingStateId': trainingState.id}) }}">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h4>Share Certificate</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="emails"
+                 style="max-height: 300px; overflow-y: auto; overflow-x: hidden">
+                <input type="hidden" name="token"
+                       value="{{ csrf_token(trainingState.id ~ trainingState.training.title) }}">
+                {% for counter in 0..19 %}
+                    <div class="row form-group email {{ counter == 0 ? '' : 'hidden' }}">
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" placeholder="Email" name="email[{{ counter }}]">
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn delete-email {{ counter == 0 ? 'hidden' : '' }}">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                {%  endfor %}
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <button class="btn add-email">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-default pull-left" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button class="btn pull-right ajax-submit" disabled="disabled">
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

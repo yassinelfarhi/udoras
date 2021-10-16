@@ -1,0 +1,109 @@
+{% if is_granted('ROLE_ADMIN') %}
+    {% set link = path('index_admin') %}
+{% elseif is_granted('ROLE_VENDOR') %}
+    {% set link = path('fs_trainings_requests_show_vendor_training_requests') %}
+{% else %}
+    {% set link = '/' %}
+{% endif %}
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/vendor-payments.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    <div class="profile">
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{{ link }}" class="btn btn-back">Back</a>
+            </div>
+            <div class="col-sm-4">
+                <h3 class="text-center" style="margin:0">{{ trainingProgram.title|training_name_format|nl2br }}</h3>
+                <h5 class="text-center">
+                    Training
+                </h5>
+            </div>
+            <div class="col-sm-4 text-right">
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_CUSTOMER') %}
+                    <a class="btn btn-lg btn-shadow"
+                       href="{{ path('show_training_program_slide', {'link': trainingProgram.link}) }}">
+                        Open
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row info-body">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Status
+                        </p>
+                        <p class="col-sm-6 training-status">
+                            {{ request.status }}
+                        </p>
+                    </div>
+                    {% include 'FSTrainingProgramsBundle:TrainingPrograms/show:link.html.twig' %}
+                    <div class="row">
+                        <p class="col-sm-6 profile-header">
+                            Price
+                        </p>
+                        <p class="col-sm-6">
+                            ${{ trainingProgram.price }} / training
+                        </p>
+                    </div>
+                    <hr>
+                    {% if trainingProgram.price == 0 %}
+                        <div class="row">
+                            <p class="col-sm-8">
+                                <i>This training is free</i>
+                            </p>
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            <p class="col-sm-12">
+                                <i>Note: you may pay for the training or let your employees pay for it</i>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="col-sm-12">
+                                Choose number of trainings to purchase:
+                            </p>
+                            <p class="col-sm-12">
+                                <input type="text" class="form-control training-amount" value="1">
+                                Total Price: $<span class="total-price"
+                                                    data-default="{{ trainingProgram.price }}">{{ trainingProgram.price }}</span>
+
+                                {% if trainingProgram.price > 0 %}
+                                    <a class="btn btn-lg btn-shadow pay-for-training pull-right"
+                                       href="{{ path('pay_for_training', {'link': trainingProgram.link}) }}"
+                                       data-key="{{ stripe_public_key }}" data-email="{{ app.user.email }}">
+                                        Pay for Training
+                                    </a>
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                </div>
+                <div class="last"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block foot_script %}
+    {{ parent() }}
+
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+
+    {% javascripts
+    '@FSTrainingProgramsBundle/Resources/public/js/payment/custom_stripe.js'
+    '@FSTrainingProgramsBundle/Resources/public/js/payment/vendor.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock foot_script %}

@@ -1,0 +1,27 @@
+<div class="questions row">
+    {% set i = 1 %}
+    {% for id, slide in questions %}
+        <div class="question col-sm-12" data-id="{{ slide.id }}">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="title">{{ slide.extraFields['question'] }}</h4>
+                </div>
+                <div class="col-sm-12">
+                    {% for answer in slide.extraFields['answers'] %}
+                        {% if answer['answer'] is not empty %}
+                            <div class="answer">
+                                <div class="checkbox">
+                                    <input class="radio" type="radio" value="{{ answer['answer'] }}" name="answer{{ slide.id }}"
+                                           id="q_{{ slide.id }}_a_{{ loop.index }}">
+                                    <label for="q_{{ slide.id }}_a_{{ loop.index }}"></label>
+                                </div>
+                                {{ answer['answer'] }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% set i = i + 1 %}
+    {% endfor %}
+</div>

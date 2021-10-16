@@ -1,0 +1,7 @@
+{% extends 'FSUserBundle::layout.html.twig' %}
+{% block navbar %}
+    {% include "@FSUser/registrationHeader.html.twig" %}
+{% endblock navbar %}
+{% block fos_user_content %}
+    <h4 class="text-center">Please check your email <i>{{ user.email }}</i> to confirm your registration.</h4>
+{% endblock %}

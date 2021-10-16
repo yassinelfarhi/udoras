@@ -1,0 +1,71 @@
+{% set search_field = form.query %}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <main>
+        <div class="row">
+            <div class="col-sm-4">
+                <a class="btn btn-lg btn-shadow btn-back" href="{{ path('index_customer') }}">
+                    Back
+                </a>
+            </div>
+            <div class="col-sm-4"><h3 class="text-center">{{ vendor.fullName }} employees</h3></div>
+            <div class="col-sm-4 text-right">
+                <a class="btn btn-lg btn-shadow"
+                   href="{{ path('new_customer_vendor_employee', {vendor: vendor.id}) }}">
+                    Create Employee
+                </a>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <div class="users-table">
+                    {% if paginator is empty %}
+                        <p>No users</p>
+                    {% else %}
+                        <table class="table font-normal">
+                            <thead>
+                            <tr>
+                                <th class="link-padding">Employee</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th width="160">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for employee in paginator %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('index_employee_profile', {'employee': employee.id}) }}">
+                                            {{ employee.fullName }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ employee.email }}
+                                    </td>
+                                    <td>
+                                        {{ employee.phone }}
+                                    </td>
+                                    <td>
+                                        {% if employee.hasCertificates %}
+                                            <a class="btn btn-in-table pull-right"
+                                               href="{{ path('index_employee_certificate', {employee:employee.id}) }}">
+                                                Certificates
+                                            </a>
+                                        {% else %}
+                                            <span>No Certificates yet.</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <div class="text-center font-normal">
+                        {{ knp_pagination_render(paginator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

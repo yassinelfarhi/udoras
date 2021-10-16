@@ -1,0 +1,22 @@
+{% if link is not defined %}
+    {% set link = path('fs_basic_homepage') %}
+    {% if is_granted("ROLE_ADMIN") %}
+        {% set link = path('index_admin') %}
+    {% elseif is_granted('ROLE_CUSTOMER') %}
+        {% set link = path('index_customer') %}
+    {% elseif is_granted('ROLE_VENDOR') %}
+        {% set link = path('index_vendor') %}
+    {% endif %}
+{% endif %}
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title text-center">User has been Created</h4>
+    </div>
+    <div class="modal-body text-center">
+        <p>We have sent a confirmation link to user's email</p>
+
+        <a href="{{ link }}" class="btn">
+            Close
+        </a>
+    </div>
+</div>

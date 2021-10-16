@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="{% if active == 'customers' %}active{% endif %}">
+        <a href="{{ path('index_admin') }}">Customers</a>
+    </li>
+    <li role="presentation" class="{% if active == 'vendors' %}active{% endif %}">
+        <a href="{{ path('admin_vendors') }}">Vendors</a>
+    </li>
+    <li role="presentation" class="{% if active == 'employee' %}active{% endif %}">
+        <a href="{{ path('admin_employee') }}">Employees</a>
+    </li>
+</ul>

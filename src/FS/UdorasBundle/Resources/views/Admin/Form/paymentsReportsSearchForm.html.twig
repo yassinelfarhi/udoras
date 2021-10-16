@@ -1,0 +1,129 @@
+<form method="GET" class="form-horizontal" id="filter-custom-form">
+    <div class="main-search">
+        <div class="row">
+            <div class="col-sm-2">
+                Customer
+            </div>
+            <div class="col-sm-2">
+                Training
+            </div>
+            <div class="col-sm-4">
+                Dates:
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                {{ form_widget(form.customer) }}
+            </div>
+            <div class="col-sm-2">
+                {{ form_widget(form.title) }}
+            </div>
+            <div class="validate-pair">
+                <div class="col-sm-3 col-xs-12 date-pair">
+                    {{ form_widget(form.dateBetween.left_date, {'attr': {'placeholder': 'from', 'class': 'date date-left validate validate-date'}}) }}
+                    <span class="dash">-</span>
+                    {{ form_widget(form.dateBetween.right_date, {'attr': {'placeholder': 'to', 'class': 'date date-right validate validate-date pull-right'}}) }}
+                </div>
+                <span class="hidden validate-pair-error">Dates: "from" date should not be greater than "to" date</span>
+            </div>
+            <div class="col-sm-3 col-sm-offset-2 text-right">
+                <button class="btn btn-md btn-shadow validateOn" type="submit" name="submit-filter">Search</button>
+                <a id='advanced' class="btn btn-link btn-md" href="#show" data-status="show">Advanced</a>
+            </div>
+        </div>
+    </div>
+    <div class="advanced-search" style="display: none">
+        <div class="row">
+            <div class="col-sm-3">
+                Price
+            </div>
+            <div class="col-sm-3">
+                Payment Total
+            </div>
+        </div>
+        <div class="row">
+            <div class="validate-pair">
+                <div class="col-sm-3">
+                    {{ form_widget(form.priceBetween.left_text, {'attr': {'placeholder': 'from', 'class': 'filter filter-input validate validate-number'}}) }}
+                    <span class="hidden validate-error">Price: "from" value must be a number</span>
+                    <span class="dash">-</span>
+                    {{ form_widget(form.priceBetween.right_text, {'attr': {'placeholder': 'to', 'class': 'filter filter-input validate validate-number'}}) }}
+                    <span class="hidden validate-error">Price: "to" value must be a number</span>
+                </div>
+                <span class="hidden validate-pair-error">Price: "from" number should not be greater than "to" number</span>
+            </div>
+
+            <div class="validate-pair">
+                <div class="col-sm-3">
+                    {{ form_widget(form.totalBetween.left_text, {'attr': {'placeholder': 'from', 'class': 'filter filter-input validate validate-number'}}) }}
+                    <span class="hidden validate-error">Total: "from" value must be a number</span>
+                    <span class="dash">-</span>
+                    {{ form_widget(form.totalBetween.right_text, {'attr': {'placeholder': 'to', 'class': 'filter filter-input validate validate-number'}}) }}
+                    <span class="hidden validate-error">Total: "to" value must be a number</span>
+                </div>
+                <span class="hidden validate-pair-error">Total: "from" number should not be greater than "to" number</span>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        var $link = $('#advanced');
+        /*if (window.location.hash) {
+         var hash = window.location.hash.substring(1);
+         if (hash == 'show') {
+         $link.data('status', 'show');
+         $link.trigger('click');
+         console.log('show')
+         } else if (hash == 'hide') {
+         $link.data('status', 'hide');
+         $link.trigger('click');
+         console.log('hide')
+         }
+         }*/
+        $link.click(function () {
+            //console.log('click triggered');
+
+            var $this = $(this);
+            var $advancedSearch = $('.advanced-search');
+
+            if ($this.data('status') == 'show') {
+                $advancedSearch.fadeIn();
+                $this.html('Regular');
+                $this.data('status', 'hide');
+                $this.attr('href', '#hide');
+                //window.location.hash = 'show'
+            } else {
+                $advancedSearch.fadeOut(400, function () {
+                    $advancedSearch.find('input').val('');
+                    $advancedSearch.find('input').parent().removeClass('pair has-error');
+                    $advancedSearch.find('select').val('');
+                });
+                $this.html('Advanced');
+                $this.data('status', 'show');
+                $this.attr('href', '#show');
+                //window.location.hash = 'hide'
+            }
+            return false;
+        });
+
+    });
+    jQuery(document).ready(function ($) {
+        $('.date-left').datetimepicker({
+            "formatter": "js",
+            "format": "mm/dd/yyyy",
+            "minView": 2,
+            "keyboardNavigation": true,
+            "autoclose": true
+        });
+        $('.date-right').datetimepicker({
+            "formatter": "js",
+            "format": "mm/dd/yyyy",
+            "minView": 2,
+            "keyboardNavigation": true,
+            "autoclose": true
+        });
+    });
+
+</script>
+

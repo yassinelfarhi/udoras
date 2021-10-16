@@ -1,0 +1,10 @@
+{% extends 'FSUserBundle::layout.html.twig' %}
+{% block navbar %}
+    {% include "@FSUser/registrationHeader.html.twig" %}
+{% endblock navbar %}
+{% block fos_user_content %}
+    <main class="text-center">
+        <h4>Registration is confirmed.</h4>
+        <a href="{{ path('fs_basic_homepage') }}" class="btn btn-yellow btn-lg btn-tall btn-shadow">Home</a>
+    </main>
+{% endblock %}

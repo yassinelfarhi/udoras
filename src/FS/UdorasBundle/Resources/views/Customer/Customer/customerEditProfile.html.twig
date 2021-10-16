@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-2">
+            <a href="{{ path('index_customer_profile', {'customer': customer.id}) }}"
+               class="btn btn-back">Back</a>
+        </div>
+        <div class="col-sm-6 col-sm-offset-1">
+            {% if customer == app.user %}
+                <h2 class="text-center">My profile</h2>
+            {% else %}
+                <h2 class="text-center">{{ customer.company }}</h2>
+            {% endif %}
+            {{ form_start(form, {action: path('customer_edit_profile',{customer: customer.id})}) }}
+            <div id="form-content">
+                <div class="styled-select">
+                    {{ form_widget(form) }}
+                </div>
+                <input class="btn btn-lg btn-tall btn-shadow pull-right" id="submit-form" type="submit" value="Save"/>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+

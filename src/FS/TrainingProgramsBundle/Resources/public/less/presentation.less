@@ -1,0 +1,440 @@
+@import "../../../../JsExtraBundle/Resources/public/less/_colors";
+
+.shadow {
+  box-shadow: 0 10px 50px fade(@button-shadow-color, 5%);
+}
+
+.presentation-workspace {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.presentation {
+  .slide-time > .input-group {
+    margin-bottom: 2px;
+  }
+
+  .workspace {
+    height: ~"calc(100vh - 240px)";
+    .slide-full {
+      min-height: 410px;
+      position: relative;
+      top: 11px;
+      margin: 0 10px 10px 10px;
+      height: ~"calc(100vh - 290px)";
+      width: 100%;
+      .slide-loading {
+        position: relative;
+        top: 35%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .slide-text-area {
+        width: 100%;
+        height: 100%;
+        resize: none;
+      }
+      .ui-wrapper {
+        max-height: 100%;
+        margin: 0 auto !important;
+        img {
+          top: 0;
+          object-fit: contain;
+        }
+        video {
+          object-fit: contain;
+        }
+      }
+      .ui-resizable {
+        margin: 0 auto !important;
+      }
+      .slide-image-type {
+        max-height: 100%;
+        max-width: 100%;
+        border: 1px solid #0000cc;
+      }
+      .slide-video-type {
+        max-height: 100%;
+        max-width: 100%;
+        border: 1px solid #0000cc;
+      }
+      .slide-audio-type {
+        text-align: center;
+        top: 41%;
+        position: relative;
+      }
+      .slide-question-type {
+        margin: 0 10px 0 10px;
+        textarea {
+          width: 100%;
+          resize: none;
+          min-height: 34px;
+          height: calc(100vh - 670px);
+        }
+        .error-has {
+          color: #ff0000;
+        }
+        .question-error {
+          margin-top: 10px;
+          display: none;
+          .question-error-empty {
+            display: none;
+          }
+          .question-error-answer {
+            display: none;
+          }
+          .question-error-goto {
+            display: none;
+          }
+          .question-error-duplicate {
+            display: none;
+          }
+        }
+        .answers-area {
+          margin-top: 10px;
+          .answer-col {
+            margin-bottom: 10px;
+            .checkbox {
+              text-align: center;
+              .radio {
+                vertical-align: top;
+                width: 17px;
+                height: 17px;
+                margin: 0 3px 0 0;
+              }
+              .radio + label {
+                cursor: pointer;
+              }
+              .radio:not(checked) {
+                position: absolute;
+                opacity: 0;
+              }
+              .radio:not(checked) + label {
+                position: relative;
+                padding: 0 0 0 35px;
+              }
+              .radio:not(checked) + label:before {
+                content: '';
+                position: absolute;
+                top: -3px;
+                left: 0;
+                width: 22px;
+                height: 22px;
+                border: 1px solid #CDD1DA;
+                border-radius: 50%;
+                background: #FFF;
+              }
+              .radio:not(checked) + label:after {
+                content: '';
+                position: absolute;
+                left: 3px;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: #9FD468;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .5);
+                opacity: 0;
+                transition: all .2s;
+              }
+              .radio:checked + label:after {
+                opacity: 1;
+              }
+              .radio:focus + label:before {
+                /*box-shadow: 0 0 0 2px rgba(14,45,150,.3);*/
+              }
+            }
+          }
+        }
+      }
+    }
+    .slide-time {
+      margin-top: 20px;
+      #slide-time-limit {
+        width: auto;
+        display: inline-block;
+      }
+    }
+    .slide-narration {
+      display: none;
+      margin-top: 11px;
+      .btn {
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        color: @link-color;
+        border: none;
+        text-align: left;
+        height: 50px;
+        padding-left: 50px;
+        padding-top: 16px;
+      }
+      .slide-add-narration {
+        background-image: url(/bundles/fstrainingprograms/img/icon-audio.svg);
+      }
+      audio {
+        margin-top: 11px;
+      }
+    }
+  }
+  .left-absolute-file {
+    position: absolute;
+    left: 99999999px;
+    overflow: hidden;
+  }
+  .slide-control {
+    min-height: 450px;
+    ul {
+      li {
+        margin-top: 8px;
+        margin-bottom: 8px;
+        .slide-add-image-file {
+          width: 0;
+          height: 0;
+        }
+        .slide-add-video-file {
+          .slide-add-image-file;
+        }
+        .slide-add-audio-file {
+          .slide-add-image-file;
+        }
+        .btn {
+          background-color: transparent;
+          background-repeat: no-repeat;
+          background-position: 10px center;
+          color: @link-color;
+          border: none;
+          text-align: left;
+          height: 50px;
+          padding-left: 50px;
+          padding-top: 16px;
+        }
+        .slide-add-text {
+          background-image: url(/bundles/fstrainingprograms/img/icon-text.svg);
+        }
+        .slide-add-image {
+          background-image: url(/bundles/fstrainingprograms/img/icon-img.svg);
+        }
+        .slide-add-video {
+          background-image: url(/bundles/fstrainingprograms/img/icon-video.svg);
+        }
+        .slide-add-audio {
+          background-image: url(/bundles/fstrainingprograms/img/icon-audio.svg);
+        }
+        .slide-add-question {
+          background-image: url(/bundles/fstrainingprograms/img/img-question.svg);
+        }
+      }
+    }
+  }
+  .control {
+    .finish {
+      margin-bottom: 40px;
+      margin-top: 10px;
+      background: @training-green;
+      color: white;
+      border: none;
+      font-weight: normal;
+    }
+    .save {
+      margin-bottom: 10px;
+      margin-top: 10px;
+      background: white;
+      color: @training-green;
+      border-radius: 2px;
+      border: solid 1px @training-green;
+      font-weight: normal;
+    }
+    .spinner-white {
+      width: 20px;
+      height: 20px;
+    }
+    .exit {
+      .save;
+      color: @training-red;
+      border-color: @training-red;
+    }
+  }
+}
+
+.slides-control {
+  margin-top: 25px;
+  .slick-disabled {
+    opacity: 0;
+  }
+  .next-slide {
+    position: relative;
+    top: 90px;
+    display: block;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    width: 48px;
+    height: 48px;
+    font-size: 30px;
+    color: #000;
+    font-weight: 600;
+    left: 36%;
+  }
+  .next-left {
+    background: url(/bundles/fstrainingprograms/img/icon-prev-slide.svg) no-repeat center;
+    background-size: 100%;
+  }
+  .next-right {
+    background: url(/bundles/fstrainingprograms/img/icon-next-slide.svg) no-repeat center;
+    background-size: 100%;
+  }
+  .slides {
+    .slick-track {
+      white-space: nowrap;
+    }
+    .slide-error {
+      border: solid 2px #FF0000 !important;
+      color: #FF0000;
+    }
+    .slide-warp {
+      .shadow;
+      outline: none;
+      position: relative;
+      width: 224px;
+      height: 155px;
+      margin: 40px 10px 10px 10px;
+      background-color: #ffffff;
+      display: inline-block;
+      float: none;
+      border: solid 1px @training-grey;
+      cursor: pointer;
+      border-radius: 4px;
+      vertical-align: middle;
+      .add-slide {
+        line-height: 155px;
+        background: url(/bundles/fstrainingprograms/img/icon-add-slide.svg) no-repeat center;
+        text-align: center;
+        .slide-text {
+          position: relative;
+          top: 35px;
+        }
+      }
+      .slide {
+        width: 100%;
+        height: 100%;
+        line-height: 155px;
+        .slide-number {
+          position: relative;
+          top: -35px;
+          left: 45%;
+          font-size: 14px;
+          text-align: center;
+          float: left;
+          font-weight: normal;
+          line-height: 1.8;
+          background: #c1c7cb;
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          color: white;
+          padding-left: 2px;
+        }
+        .slide-remove {
+          position: absolute;
+          top: 18px;
+          right: 10px;
+          font-size: 20px;
+          font-weight: normal;
+          z-index: 9999;
+          line-height: 0;
+        }
+        .slide-time-limit {
+          position: absolute;
+          top: 18px;
+          left: 10px;
+          font-size: 16px;
+          font-weight: normal;
+          z-index: 9999;
+          line-height: 0;
+          display: none;
+        }
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 34px;
+          border-bottom: solid 1px @training-grey;
+          border-top-left-radius: 4px;
+          border-top-right-radius: 4px;
+        }
+      }
+      .slide-type {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        .slide-icon {
+          display: block;
+          width: 100%;
+          height: 100%;
+          background-position: center;
+          background-size: 25%;
+          background-repeat: no-repeat;
+          &:after {
+            position: absolute;
+            text-align: center;
+            top: -58px;
+            left: 0;
+            right: 0;
+            margin: auto;
+          }
+          &.slide-icon-text {
+            background-image: url(/bundles/fstrainingprograms/img/icon-text.svg);
+            &:after {
+              content: "Text"
+            }
+          }
+          &.slide-icon-image {
+            background-image: url(/bundles/fstrainingprograms/img/icon-img.svg);
+            &:after {
+              content: "Image"
+            }
+          }
+          &.slide-icon-video {
+            background-image: url(/bundles/fstrainingprograms/img/icon-video.svg);
+            &:after {
+              content: "Video"
+            }
+          }
+          &.slide-icon-audio {
+            background-image: url(/bundles/fstrainingprograms/img/icon-audio.svg);
+            &:after {
+              content: "Audio"
+            }
+          }
+          &.slide-icon-question {
+            background-image: url(/bundles/fstrainingprograms/img/img-question.svg);
+            &:after {
+              content: "Question"
+            }
+          }
+        }
+      }
+    }
+    .slide-state-highlight {
+      .slide-warp;
+      background-color: #ffcc00;
+    }
+    .active {
+      border: solid 2px #00b3ee !important;
+    }
+  }
+}
+
+.page-wrap {
+  overflow-x: hidden;
+  overflow-y: auto;
+  &:after {
+    display: none !important;
+  }
+}

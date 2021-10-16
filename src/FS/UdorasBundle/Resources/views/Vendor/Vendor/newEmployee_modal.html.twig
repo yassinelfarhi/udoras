@@ -1,0 +1,23 @@
+{% set link = path('fs_basic_homepage') %}
+{% if is_granted("ROLE_ADMIN") %}
+    {% set link = path('admin_employee') %}
+{% elseif is_granted('ROLE_CUSTOMER') %}
+    {% set link = path('index_customer') %}
+{% elseif is_granted('ROLE_VENDOR') %}
+    {% set link = path('index_vendor') %}
+{% endif %}
+
+{{ form_stylesheet(form) }}
+{{ form_start(form, {action: path('vendor_create_employee')}) }}
+<div id="form-content">
+    <div>
+        {% include "@FSUdoras/FormFormat/employee.html.twig" %}
+    </div>
+    <input class="btn btn-lg btn-tall btn-shadow pull-right ajax-submit" id="submit-form" type="submit"
+           value="Create Employee"/>
+</div>
+{{ form_end(form) }}
+{{ form_javascript(form.birthday) }}
+<script>
+    $('input,select').trigger('change');
+</script>

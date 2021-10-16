@@ -1,0 +1,48 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    role_hierarchy:
+        ROLE_EMPLOYEE:    ROLE_USER
+        ROLE_VENDOR:      ROLE_EMPLOYEE
+        ROLE_CUSTOMER:    ROLE_VENDOR
+        ROLE_ADMIN:       ROLE_CUSTOMER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
+
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            form_login:
+                login_path: /#login
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                check_path: fos_user_security_check
+                failure_path: fos_user_security_login
+                default_target_path: fs_user_security_login_success
+                always_use_default_target_path: true
+            logout:
+                path: fos_user_security_logout
+                target: fs_home_thanks
+            anonymous:    true
+            remember_me:
+                key:      "%secret%"
+                lifetime: 2592000
+                path:     /
+                domain:   ~
+                user_provider: fos_userbundle
+
+    access_control:
+            - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/admin/, role: ROLE_ADMIN }
+            - { path: ^/logout, role: [ROLE_ADMIN, ROLE_USER] }
+            - { path: ^/customer, role: ROLE_CUSTOMER }
+            - { path: ^/vendor, role: ROLE_VENDOR }
+            - { path: ^/employee, role: ROLE_EMPLOYEE }

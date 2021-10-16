@@ -1,0 +1,131 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}
+    {% stylesheets
+    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less' %}
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset_url }}" type="text/css" rel="stylesheet"
+          media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{#<style type="text/css">
+    table.gridtable {
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border: 1px #666666;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table.gridtable th {
+        padding: 8px;
+        border: 1px solid #666666;
+        background-color: #dedede;
+    }
+
+    table.gridtable td {
+        padding: 8px;
+        border: 1px solid #666666;
+        background-color: #ffffff;
+    }
+</style>#}
+{% block body %}
+    <style type="text/css">
+        table, tr, td, th, tbody, thead, tfoot {
+            page-break-inside: avoid !important;
+        }
+    </style>
+    <main>
+        <div style="text-align: center;"><h2><b>Payments Report</b></h2></div>
+
+        {% if hasFilter %}
+            <table class="table">
+                <thead>
+                <tr>
+                    {% for key, val in filterConditions|filter_conditions %}
+                        {% if val != null %}
+                            <th>
+                                {{ key|spaces|capitalize }}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for key, val in filterConditions|filter_conditions %}
+
+                        {% if val != null and val is not iterable %}
+                            <td>
+                                {{ val|cut_long|nl2br }}
+                            </td>
+                        {% elseif val is iterable %}
+                            <td>
+                                {% for sub_key, sub_val in val %}
+                                    {% if loop.index == 2 %}
+                                        -
+                                    {% endif %}
+                                    {{ sub_val }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Trainings</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for paymentRow in payments %}
+                {% set payment = paymentRow[0] %}
+                {% set total = paymentRow[1] %}
+                {% set training = payment.trainingProgram %}
+                {% set customer = training.customer %}
+                <tr>
+                    <td>
+                        {% if customer %}
+                            {% if customer.deletedAt %}
+                                <span class="text-danger">{{ customer.company }} (deleted)</span>
+                            {% else %}
+                                {{ customer.company }}
+                            {% endif %}
+                        {% else %}
+                            No company
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if training %}
+                            {% if training.deletedAt %}
+                                <span class="text-danger">{{ training.title|training_name_format|nl2br }} (deleted)</span>
+                            {% else %}
+                                {{ training.title|training_name_format|nl2br }}
+                            {% endif %}
+                        {% else %}
+                            No training
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if training %}
+                            <b>${{ training.price }}</b>
+                        {% else %}
+                            No price
+                        {% endif %}
+                    </td>
+                    <td class="text-center"><b>${{ total }}</b></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </main>
+{% endblock %}

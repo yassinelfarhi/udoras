@@ -1,0 +1,357 @@
+@import "_colors";
+
+.form-group {
+  position: relative;
+  margin-top: 35px;
+  input.form-control, select.form-control {
+    position: relative;
+    border: none;
+    border-bottom: 1px solid @border-color;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    &:-webkit-autofill {
+      box-shadow: 0 0 0 1000px white inset;
+    }
+  }
+  label.control-label {
+    color: @placeholder-color;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    cursor: text;
+    transition: all 0.2s ease-in-out;
+    text-align: left;
+    padding-left: 20px;
+    &.has-value {
+      font-size: 0.7em;
+      top: -1.2em;
+      z-index: 1;
+      height: 1em;
+      bottom: auto;
+    }
+  }
+  &.label-static {
+    label.control-label {
+      position: static;
+      padding-right: 0;
+      padding-top: 10px;
+      font-weight: normal;
+      &:after {
+        content: '';
+      }
+      &.has-value {
+        font-size: 1em;
+      }
+    }
+    .form-appendix {
+      position: relative;
+      top: 10px;
+      left: -20px;
+    }
+  }
+}
+
+.checkbox, .vendor-checkbox, .employee-checkbox {
+  position: relative;
+  input[type="checkbox"] {
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    opacity: 0;
+    & + .checkbox-style {
+      background: #ffffff url(/bundles/fsudoras/images/checkbox-off.svg);
+      background-size: 100%;
+      position: absolute;
+      top: 7px;
+      left: 0;
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      line-height: normal;
+    }
+    &:checked + .checkbox-style {
+      background-image: url(/bundles/fsudoras/images/checkbox-on.svg);
+    }
+  }
+}
+
+.radio {
+  position: relative;
+  input[type="radio"] {
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    opacity: 0;
+    & + .radio-style {
+      background-color: #ffffff;
+      position: absolute;
+      top: 14px;
+      left: 7px;
+      width: 20px;
+      padding: 0;
+      height: 20px;
+      display: inline-block;
+      line-height: normal;
+      border-radius: 50%;
+      border: solid 1px @border-color;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+    }
+    &:checked + .radio-style:after {
+      background-color: @training-green;
+    }
+  }
+}
+
+
+.vendor-checkbox {
+  input[type="checkbox"] {
+    top: 5px;
+    right: 5px;
+  }
+}
+
+.employee-checkbox {
+  input[type="checkbox"] {
+    top: -5px;
+    left: 15px;
+  }
+}
+
+.advanced-search {
+  input[type="checkbox"] + .checkbox-style {
+    top: 12px;
+    left: -12px;
+  }
+}
+
+.styled-select {
+  select {
+    background: transparent url(/bundles/fsudoras/images/dropdown.svg);
+    background-repeat: no-repeat;
+    background-position: right center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+
+.btn {
+  border-radius: 4px;
+  border: none;
+  background-color: @button-color;
+  font-weight: bold;
+  color: @button-text-color;
+  outline: none !important;
+  letter-spacing: 0.9px;
+  font-size: 14px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  &:hover {
+    background-color: @button-hover-color;
+    color: @button-text-hover-color;
+    outline: none;
+  }
+  &:active, &:focus, &:visited {
+    color: @button-text-color;
+    outline: none;
+  }
+  &.btn-lg {
+    width: 184px;
+    max-width: 100%;
+    height: 49px;
+    padding: 17px 0;
+    margin-bottom: 10px;
+  }
+  &.btn-md {
+    width: 101px;
+    max-width: 100%;
+    height: 49px;
+    padding: 15px 0;
+  }
+  &.btn-shadow {
+    box-shadow: 0 10px 50px @button-shadow-color;
+  }
+  &.btn-grey, &.btn-default, &.btn-back {
+    background-color: @button-grey-color;
+    &:hover {
+      background-color: @button-grey-hover-color;
+    }
+  }
+  &.btn-red, &.btn-danger {
+    background-color: @button-red-color;
+    &:hover {
+      background-color: @button-red-hover-color;
+    }
+  }
+  &.btn-link {
+    background: none;
+    color: @table-text-color;
+    font-weight: normal;
+    &:hover {
+      text-decoration: none;
+      background: @link-hover-background;
+    }
+    &[disabled]:hover {
+      background: none;
+      cursor: default;
+    }
+  }
+  &.btn-light {
+    background: @button-light-color;
+    color: @text-color;
+    &:hover {
+      background-color: @button-light-hover-color;
+    }
+  }
+  &.btn-in-table {
+    width: 152px;
+    height: 40px;
+    min-height: 40px;
+    background-color: @button-table-color;
+    padding: 10px;
+    font-weight: normal;
+    &:hover {
+      background-color: @button-table-hover-color;
+    }
+    &.btn-yellow {
+      background-color: @button-color;
+      &:hover {
+        background-color: @button-hover-color;
+      }
+    }
+  }
+  &.btn-tall {
+    margin-top: 100px;
+    margin-bottom: 115px;
+  }
+  &.btn-back {
+    .btn-lg;
+    .btn-shadow;
+    position: relative;
+    &:before {
+      display: inline-block;
+      position: absolute;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      content: '➔';
+      line-height: 49px;
+      font-size: 24px;
+      width: 24px;
+      transform: scaleX(-1);
+    }
+  }
+  &.btn-admin-create {
+    position: relative;
+    top: -80px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .btn.btn-lg {
+    width: 100%;
+    margin-bottom: 40px;
+  }
+}
+
+.has-error {
+  .form-control:focus {
+    box-shadow: none;
+  }
+}
+
+[class*=" datetimepicker-dropdown"] {
+  &:before {
+    border-bottom-color: @datepicker-header-border;
+  }
+  &:after {
+    border-bottom-color: @datepicker-header-color;
+  }
+}
+
+.datetimepicker-dropdown-bottom-right:after {
+  top: -5px;
+}
+
+.datepicker-cell() {
+  background: none !important;
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 0;
+    border-radius: 4px;
+    z-index: -1;
+  }
+  &.active:before {
+    background: @button-color;
+  }
+  &:hover {
+    color: @text-color;
+    &:before {
+      background: #eee;
+    }
+  }
+}
+
+body > .datetimepicker {
+  padding: 0;
+  border-color: @datepicker-header-border;
+  table {
+    border: 1px solid @datepicker-header-border;
+    thead {
+      background: @datepicker-header-color;
+      border: 7px solid @datepicker-header-color;
+      th {
+        border-radius: 0;
+        /* fix for white background on disabled arrow in header */
+        &[style*="hidden"] {
+          visibility: visible !important;
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+    tbody {
+      border: 7px solid white;
+      border-top-width: 10px;
+    }
+  }
+  .datetimepicker-days table tbody tr td {
+    .datepicker-cell();
+  }
+
+  .datetimepicker-months, .datetimepicker-years {
+    table tbody tr td span {
+      .datepicker-cell();
+    }
+  }
+}
+
+input:-webkit-autofill {
+  color: transparent !important;
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+
+.form-control[readonly], .form-control[disabled] {
+  opacity: 0.5;
+}

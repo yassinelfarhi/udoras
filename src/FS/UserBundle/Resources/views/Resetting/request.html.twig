@@ -1,0 +1,37 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <form action="{{ path('fos_user_resetting_send_email') }}" method="post" class="fos_user_resetting_request">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center">Reset password</h4>
+            </div>
+            <div class="modal-body">
+                {% if invalid_username is defined %}
+                    <div class="alert alert-danger">
+                        <div>You have entered an invalid Email!</div>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <input class="form-control" type="email" id="email-reset" name="username"
+                           required="required" value="{{ email }}"/>
+                    <label for="email-reset" class="control-label">Email:</label>
+                </div>
+
+                <div class="form-group text-center">
+                    <input class="btn btn-lg ajax-submit" type="submit" id="_submit" name="_submit"
+                           value="Reset password"/>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            $('#email-reset').val($('#email').val());
+            $('input').trigger('change'); // reflow labels
+        });
+    </script>
+{% endblock fos_user_content %}

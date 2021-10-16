@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block navbar %}
+    {% include "@FSUser/registrationHeader.html.twig" %}
+    <header>
+        <div class="container-fluid text-center">
+            <h2>Reset password</h2>
+        </div>
+    </header>
+{% endblock navbar %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+            {{ form_start(form, {
+                'action': path('fos_user_resetting_reset', {'token': token}),
+                'method': 'POST',
+                'class': 'form-horizontal'
+            }) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.plainPassword) }}
+            <div class="form-group text-center tall">
+                <input class="btn btn-lg btn-shadow" type="submit" id="_submit" name="_submit"
+                       value="{{ 'resetting.reset.submit'|trans }}"/>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

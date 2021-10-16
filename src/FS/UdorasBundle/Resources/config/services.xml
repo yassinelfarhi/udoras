@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="fs_udoras.util.mailer.class">FS\UdorasBundle\Util\Mailer</parameter>
+        <parameter key="fs_udoras.event_listener.annotation_listener.class">FS\UdorasBundle\EventListener\AnnotationListener</parameter>
+        <parameter key="fs_udoras.form.type.create_vendor.class">FS\UdorasBundle\Form\Type\CreateVendorFormType</parameter>
+        <parameter key="fs_udoras.form.type.create_employee.class">FS\UdorasBundle\Form\Type\CreateEmployeeType</parameter>
+        <parameter key="fs_udoras.form.type.create_customer.class">FS\UdorasBundle\Form\Type\CreateCustomerType</parameter>
+        <parameter key="fs_udoras.twig.training_status.extension.class">FS\UdorasBundle\Twig\Extension\TrainingStatusExtension</parameter>
+        <parameter key="fs_udoras.twig.pdf_filters.extension.class">FS\UdorasBundle\Twig\Extension\PdfFiltersExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="fs.mailer" class="%fs_udoras.util.mailer.class%">
+            <argument type="service" id="mailer"/>
+            <argument type="service" id="twig"/>
+            <argument type="service" id="router"/>
+            <argument>%notification_email%</argument>
+        </service>
+        <service id="fs_udoras.annotation_listener" class="%fs_udoras.event_listener.annotation_listener.class%">
+            <argument type="service" id="annotations.reader" />
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="snc_redis.default" />
+            <argument type="service" id="router" />
+            <argument type="service" id="pugx_user.manager.user_discriminator"/>
+            <argument type="service" id="pugx_user.manager.orm_user_manager"/>
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController"/>
+        </service>
+
+        <service id="fs_udoras.vendor.create_form.type" class="%fs_udoras.form.type.create_vendor.class%">
+            <argument type="service" id="security.token_storage" />
+        </service>
+        <service id="fs_udoras.employee.create_form.type" class="%fs_udoras.form.type.create_employee.class%">
+            <tag name="form.type" alias="fs_user_create_employee_form"/>
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="fos_user.user_manager"/>
+        </service>
+        <service id="fs_udoras.customer.create_form.type" class="%fs_udoras.form.type.create_customer.class%">
+            <tag name="form.type" alias="fs_user_create_customer_form"/>
+        </service>
+        <service id="fs_udoras.twig_extension"
+                 class="%fs_udoras.twig.training_status.extension.class%"
+                 public="false">
+            <tag name="twig.extension" />
+        </service>
+        <service id="fs_udoras.pdf_filters.twig_extension"
+                 class="%fs_udoras.twig.pdf_filters.extension.class%"
+                 public="false">
+            <tag name="twig.extension" />
+        </service>
+    </services>
+</container>

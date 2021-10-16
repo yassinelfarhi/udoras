@@ -1,0 +1,41 @@
+<div class="row training-action">
+    <div class="col-sm-12">
+        {% if freeLink is defined %}
+            <a class="btn btn-lg btn-shadow ajax-link"
+               href="{{ path('training_program_free_access_add', {'link': freeLink.link}) }}">
+                Book Training
+            </a>
+        {% elseif access.trainingState %}
+            {% if access.trainingState.passedStatus == constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_IN_PROGRESS') %}
+                <a class="btn btn-lg btn-shadow"
+                   href="{{ path('show_training_program_employee', {link: access.trainingProgram.link}) }}">
+                    Open Training
+                </a>
+            {% elseif access.trainingState.passedStatus == constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_PASSED') %}
+                <a class="btn btn-lg btn-shadow"
+                   href="{{ path('employee_certificate', {employeeTrainingState: access.trainingState.id}) }}">
+                    Open Certificate
+                </a>
+            {% else %}
+                <p>
+                    Certificate not available
+                </p>
+            {% endif %}
+        {% else %}
+            {% if access.request != null and access.request.amountOfTrainings > 0 %}
+                <a class="btn btn-lg btn-shadow ajax-book-training"
+                   href="{{ path('add_training_program_bought_by_vendor', {trainingProgram: trainingProgram.id}) }}">
+                    Book Training
+                </a>
+            {% else %}
+                <a class="btn btn-lg btn-shadow pay-for-training"
+                   href="{{ path('pay_for_training', {'link': trainingProgram.link}) }}"
+                   data-key="{{ stripe_public_key }}"
+                   data-email="{{ app.user.email }}"
+                   data-amount="{{ trainingProgram.price }}">
+                    Pay for Training
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

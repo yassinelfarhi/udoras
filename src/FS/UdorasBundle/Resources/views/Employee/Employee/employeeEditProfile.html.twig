@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {{ form_stylesheet(form) }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-2">
+            <a href="{{ path('index_employee_profile', {'employee': employee.id}) }}"
+               class="btn btn-back btn-lg">Back</a>
+        </div>
+        <div class="col-sm-6 col-sm-offset-1">
+            {% if employee == app.user %}
+                <h2 class="text-center">My profile</h2>
+            {% else %}
+                <h2 class="text-center">Edit Employee</h2>
+            {% endif %}
+            {{ form_start(form, {action: path('employee_edit_profile',{employee:employee.id})}) }}
+            <div id="form-content">
+                <div class="styled-select">
+                    {% include "@FSUdoras/FormFormat/employee.html.twig" %}
+                </div>
+                <input class="btn btn-lg btn-tall btn-shadow pull-right" id="submit-form" type="submit" value="Save"/>
+            </div>
+            {{ form_end(form) }}
+            {{ form_javascript(form.birthday) }}
+        </div>
+    </div>
+{% endblock content %}

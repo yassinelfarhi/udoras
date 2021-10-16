@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block head_bottom %}
+    {% stylesheets
+    '@FSBasicBundle/Resources/public/less/home.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="col-md-8 col-md-offset-2">
+                <h2>Thank you!</h2>
+            </div>
+        </div>
+    </main>
+{% endblock %}

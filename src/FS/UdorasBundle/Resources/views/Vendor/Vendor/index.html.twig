@@ -1,0 +1,61 @@
+{% set search_field = form.query %}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <main>
+        <div class="pull-right">
+            <a href="{{ path('vendor_new_employee') }}" class="btn btn-lg btn-shadow"
+               style="margin-top: -100px;z-index: 1;position: relative;">
+                Create employee
+            </a>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <div class="users-table">
+                    {% if paginator is empty %}
+                        <p>No users</p>
+                    {% else %}
+                        <table class="table font-normal">
+                            <thead>
+                            <tr>
+                                <th class="link-padding">Employee</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for employee in paginator %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('index_employee_profile', {'employee': employee.id}) }}">
+                                            {{ employee.fullName }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ employee.email }}
+                                    </td>
+                                    <td>
+                                        {{ employee.phone }}
+                                    </td>
+                                    <td>
+                                        {% if employee.hasCertificates %}
+                                            <a href="{{ path('index_employee_certificate', {employee:employee.id}) }}"
+                                               class="btn btn-in-table">Certificates</a>
+                                        {% else %}
+                                            <span>No Certificates yet.</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <div class="text-center font-normal">
+                        {{ knp_pagination_render(paginator) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

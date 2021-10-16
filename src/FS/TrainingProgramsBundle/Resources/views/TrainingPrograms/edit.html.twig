@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/links.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-sm-3">
+            <a href="{{ path('show_training_program',{link:trainingProgram.link}) }}"
+               class="btn btn-back btn-lg">Back</a>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group label-static">
+                <div class="col-sm-4">{{ form_label(form.title) }}</div>
+                <div class="col-sm-8">{{ form_widget(form.title) }}</div>
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{ form_errors(form.title) }}
+                </div>
+            </div>
+            <div class="form-group label-static">
+                <div class="col-sm-4">{{ form_label(form.passing) }}</div>
+                <div class="col-sm-2">{{ form_widget(form.passing, {attr: {class: 'text-right'}}) }}</div>
+                <div class="col-sm-1 form-appendix">%</div>
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{ form_errors(form.passing) }}
+                </div>
+            </div>
+            <div class="form-group label-static">
+                <div class="col-sm-4">{{ form_label(form.price) }}</div>
+                <div class="col-sm-2">{{ form_widget(form.price, {attr: {class: 'text-right'}}) }}</div>
+                <div class="col-sm-1 form-appendix">$</div>
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{ form_errors(form.price) }}
+                </div>
+            </div>
+            <div class="form-group label-static">
+                <div class="col-sm-4 radio">
+                    <input type="radio" name="certificateValidityType" id="cvu"
+                           {% if form.certificateValidUntil.vars.data is not empty %}checked{% endif %}>
+                    <label for="cvu" class="radio-style"></label>
+                    {{ form_label(form.certificateValidUntil) }}
+                </div>
+                <div class="col-sm-8">{{ form_widget(form.certificateValidUntil) }}</div>
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{ form_errors(form.certificateValidUntil) }}
+                </div>
+            </div>
+            <div class="form-group label-static">
+                <div class="col-sm-4 radio">
+                    <input type="radio" name="certificateValidityType" id="cvm"
+                            {% if form.certificateValidMonths.vars.data is not empty %}checked{% endif %}>
+                    <label for="cvm" class="radio-style"></label>
+                    {{ form_label(form.certificateValidMonths) }}
+                </div>
+                <div class="col-sm-2">{{ form_widget(form.certificateValidMonths, {attr: {class: 'text-right'}}) }}</div>
+                <div class="col-sm-1 form-appendix">months</div>
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{ form_errors(form.certificateValidMonths) }}
+                </div>
+            </div>
+            <hr>
+            <h5>Links to free Trainings:</h5>
+
+            <div class="links">
+                {% include 'FSTrainingProgramsBundle:Links:links.html.twig' with {
+                'trainingProgram': trainingProgram,
+                'linksPagination': linksPagination,
+                'edit': true
+                } %}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="text-right">
+                <input type="submit" value="Save" class="btn btn-lg btn-shadow">
+            </div>
+        </div>
+    </div>
+    {{ form_javascript(form.certificateValidUntil) }}
+    {{ form_stylesheet(form.certificateValidUntil) }}
+    <script>
+        $(function () {
+            $('#cvm,#cvu').on('change', function () {
+                $('#fs_training_training_program_type_certificateValidUntil').prop('disabled', !$('#cvu').is(':checked'));
+                $('#fs_training_training_program_type_certificateValidMonths').prop('disabled', !$('#cvm').is(':checked'));
+            });
+        });
+    </script>
+    {{ form_end(form) }}
+{% endblock %}

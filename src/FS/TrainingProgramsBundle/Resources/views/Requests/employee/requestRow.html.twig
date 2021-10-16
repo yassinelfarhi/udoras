@@ -1,0 +1,66 @@
+<tr class="training-row">
+    <td>
+        <a href="{{ path('show_training_program', {'link': trainingProgram.link}) }}">
+            {{ trainingProgram.title|training_name_format|nl2br }}
+        </a>
+    </td>
+
+    <td>
+        ${{ trainingProgram.price }}
+    </td>
+
+    {% if access.request != null and access.request.amountOfTrainings > 0 %}
+        <td>Paid</td>
+    {% elseif trainingState == null or trainingState.passedStatus == constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_IN_PROGRESS') %}
+        <td>{{ access.status }}</td>
+    {% else %}
+        <td class="{{ get_class_by_state(trainingState.passedStatus) }}">
+            {{ trainingState.passedStatus|capitalize }}
+        </td>
+    {% endif %}
+
+    <td>
+        {% if trainingState == null %}
+            {% if access.request != null and access.request.amountOfTrainings > 0 %}
+                <a class="btn btn-in-table btn-yellow ajax-book-training"
+                   href="{{ path('add_training_program_bought_by_vendor', {trainingProgram: trainingProgram.id}) }}">
+                    Book Training
+                </a>
+            {% else %}
+                <a class="btn btn-in-table btn-yellow pay-for-training"
+                   href="{{ path('pay_for_training', {'link': trainingProgram.link}) }}"
+                   data-key="{{ stripe_public_key }}"
+                   data-email="{{ app.user.email }}"
+                   data-amount="{{ trainingProgram.price }}">
+                    Pay for Training
+                </a>
+            {% endif %}
+        {% else %}
+            {% if trainingState.passedStatus == constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_IN_PROGRESS') %}
+                {% if access.state == constant('FS\\TrainingProgramsBundle\\Entity\\Access::NOT_PAID') %}
+                    <a class="btn btn-in-table btn-yellow pay-for-training"
+                       href="{{ path('pay_for_training', {'link': trainingProgram.link}) }}"
+                       data-key="{{ stripe_public_key }}"
+                       data-email="{{ app.user.email }}"
+                       data-amount="{{ trainingProgram.price }}">
+                        Pay for Training
+                    </a>
+                {% else %}
+                    <a class="btn btn-in-table"
+                       href="{{ path('show_training_program_employee', {link: access.trainingProgram.link}) }}">
+                        Open Training
+                    </a>
+                {% endif %}
+            {% else %}
+                {% if trainingState.passedStatus == constant('FS\\TrainingProgramsBundle\\Entity\\EmployeeTrainingState::FINAL_STATUS_PASSED') %}
+                    <a class="btn btn-in-table"
+                       href="{{ path('employee_certificate', {'employeeTrainingState': access.trainingState.id}) }}">
+                        Certificate
+                    </a>
+                {% else %}
+                    Certificate not available
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>

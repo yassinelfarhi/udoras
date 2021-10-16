@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}{% endblock navbar %}
+
+{% block head_style %}
+    {{ parent() }}
+    {% stylesheets
+    '@FSTrainingProgramsBundle/Resources/public/less/presentation.less' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+    {% stylesheets
+    '@FSJsExtraBundle/Resources/public/css/slick.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock head_style %}
+
+{% block container %}
+    <div class="presentation-workspace">
+        <div class="row presentation">
+            <div class="col-md-2 slide-control">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#" class="btn btn-primary btn-block slide-add-text">Add text</a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-primary btn-block slide-add-image">Add image</a>
+                        <input type="file" class="slide-add-image-file left-absolute-file" name="image"/>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-primary btn-block slide-add-video">Add video</a>
+                        <input type="file" class="slide-add-video-file left-absolute-file" name="video"/>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-primary btn-block slide-add-audio">Add audio</a>
+                        <input type="file" class="slide-add-audio-file left-absolute-file" name="audio"/>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-primary btn-block slide-add-question">Add question</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-8 workspace">
+                <div class="slide-full">
+                </div>
+                <div class="slide-time col-md-4">
+                    <label for="slide-time-limit">Slide time limit: </label>
+                    <input type="text" maxlength="4" size="4" class="form-control slide-time-limit timeout-manipulator"
+                           value="--:--" id="slide-time-limit" disabled/>
+                </div>
+                <div class="col-md-4 slide-narration">
+                    <a href="#" class="btn btn-primary btn-block slide-add-narration">Add narration</a>
+                    <input type="file" name="slide-narration-file" id="slide-narration-file"
+                           class="slide-narration-file left-absolute-file">
+                </div>
+            </div>
+            <div class="col-md-2 control">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#"
+                           data-redirect="{{ path('training_program_redirect', {trainingProgram:program.id}) }}"
+                           class="btn btn-primary btn-block finish">
+                            Finish
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-primary btn-block save">Save</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('training_program_end_create_presentation', {trainingProgram:program.id}) }}"
+                           class="btn btn-primary btn-block exit ajax-modal" data-op="nothing">
+                            Exit
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row slides-control">
+            <div class="col-sm-1">
+                <div class="next-slide next-left"></div>
+            </div>
+            <div class="col-sm-10 slides">
+                <div class="slide-warp add-slide-handle">
+                    <div class="add-slide" data-op="add-slide" data-id="0">
+                        <span class="slide-text">Add Slide</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="next-slide next-right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="modal-error" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="mySmallModalLabel">Error</h4>
+            </div>
+            <div id="modal-error-content" class="modal-body"> ...
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-sure-cancel-encoding">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center">Your file is still uploading. Are you sure you want to cancel upload?</h3>
+                <br/>
+                <br/>
+                <br/>
+                <p class="text-center">
+                    <a class="btn" href="#" data-dismiss="modal" id="modal-sure-cancel-encoding-yes">Yes</a>
+                    <a class="btn btn-grey" data-dismiss="modal" href="#">No</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock container %}
+
+{% block footer %}{% endblock footer %}
+
+{% block foot_script %}
+    {{ parent() }}
+    {% javascripts
+    "@FSJsExtraBundle/Resources/public/js/slick.min.js"
+    "@FSJsExtraBundle/Resources/public/js/jquey.blockUI.js"
+    "@FSJsExtraBundle/Resources/public/js/jquery.maskedinput.min.js" %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% javascripts
+    "@FSTrainingProgramsBundle/Resources/public/js/presentation/*"
+    output="presentation.js" %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        jQuery(function ($) {
+            UDP.settings.communicatorPath = "{{ path('presentation_communicator',{presentation:program.id}) }}";
+            UDP.settings.slidePath = "{{ path('slide_communicator',{slide:"_slide_"}) }}";
+            UDP.Communicator.init({{ program.id }});
+
+            UDP.Loader.init();
+        })
+    </script>
+{% endblock foot_script %}

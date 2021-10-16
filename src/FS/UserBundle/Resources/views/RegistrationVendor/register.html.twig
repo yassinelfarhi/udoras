@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+{% block navbar %}
+    {% include "@FSUser/registrationHeader.html.twig" %}
+{% endblock navbar %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                    {{ form_start(form) }}
+                    {% include "@FSUser/FormFormat/vendor.html.twig" %}
+                    <div class="form-group form-text">
+                        <span>
+                            By clicking on "Create Account" button, you agree with our
+                            <a href="{{ path('fs_basic_privacy_policy_page') }}">
+                                Privacy Policy
+                            </a>
+                        </span>
+                    </div>
+                    <div class="form-group form-text">
+                        <p style="margin-top: 10px">
+                            <a href="{{ path('fs_basic_homepage') }}" class="btn btn-shadow btn-lg btn-back">Back</a>
+                            <button type="submit" class="btn btn-shadow btn-lg pull-right ajax-submit">Create Account
+                            </button>
+                        </p>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {#<div id="ajax-modal" class="modal in animated shake" tabindex="-1" style="display: none;" aria-hidden="false"></div>#}
+{% endblock %}

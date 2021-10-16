@@ -1,0 +1,49 @@
+{% set search_field = form.title %}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <main>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active">
+                <div class="users-table">
+                    {% if trainingProgramPagination is empty %}
+                        <p>No Programs</p>
+                    {% else %}
+                        <table class="table font-normal">
+                            <thead>
+                            <tr>
+                                <th class="link-padding">Title</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th width="180">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for trainingProgram in trainingProgramPagination %}
+                                {% set access = trainingProgram.accesses[0] %}
+                                {% set trainingState = access.trainingState %}
+                                {% include 'FSTrainingProgramsBundle:Requests/employee:requestRow.html.twig' %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <div class="font-normal text-center">
+                        {{ knp_pagination_render(trainingProgramPagination) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block foot_script %}
+    {{ parent() }}
+
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+
+    {% javascripts
+    '@FSTrainingProgramsBundle/Resources/public/js/payment/custom_stripe.js'
+    '@FSTrainingProgramsBundle/Resources/public/js/book-training.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock foot_script %}

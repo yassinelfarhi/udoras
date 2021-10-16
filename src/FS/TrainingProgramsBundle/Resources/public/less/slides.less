@@ -1,0 +1,215 @@
+@import "../../../../JsExtraBundle/Resources/public/less/_colors";
+
+.modal-backdrop.fade.in {
+  opacity: 1 !important;
+}
+
+.question-error {
+  font-weight: 600;
+}
+
+.slide {
+  .status-row {
+    margin: 50px 0;
+    .logo img {
+      width: 100px;
+      height: 100px;
+    }
+    .progress-text {
+      line-height: 50px;
+    }
+    .progress-bar {
+      height: 10px;
+      width: 100%;
+      margin: 5px 0;
+      border-radius: 5px;
+      background: @training-grey;
+      box-shadow: none;
+      padding: 2px;
+      span {
+        border-radius: 5px;
+        height: 6px;
+        display: block;
+        background: @button-color;
+      }
+    }
+  }
+
+  .main-slide {
+    height: ~"calc(100vh - 300px)";
+    overflow-x: auto;
+  }
+  .content {
+    margin-bottom: 20px;
+
+    .text {
+      padding: 40px 53px;
+      background: @slide-background-color;
+      min-height: ~"calc(100vh - 300px)";
+
+      > div.content {
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+      }
+    }
+
+    .image {
+      background: @slide-background-color;
+      padding: 30px;
+      max-height: 100%;
+      position: relative;
+
+      .row {
+        height: ~"calc(100vh - 380px)";
+        > img {
+          position: relative;
+          object-fit: contain;
+          max-width: 100%;
+          max-height: 100%;
+        }
+        &.narration {
+          height: auto;
+          position: absolute;
+          left: 10px;
+          right: 10px;
+          margin: auto;
+          bottom: 10px;
+          audio {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .video {
+      background: @slide-background-color;
+      padding: 30px;
+      max-height: 100%;
+
+      > video {
+        position: relative;
+        object-fit: contain;
+        max-width: 100%;
+        max-height: ~"calc(100vh - 360px)";
+      }
+    }
+
+    .questions {
+      height: ~"calc(100vh - 300px)";
+      overflow-y: auto;
+      background: @slide-background-color;
+      padding: 40px 53px;
+
+      .question + .question {
+        border-top: 1px solid #dadada;
+      }
+    }
+
+    > .question {
+      min-height: ~"calc(100vh - 300px)";
+      padding: 30px;
+      background: @slide-background-color;
+    }
+    > .question-final {
+      padding: 10px 0;
+      background: @slide-background-color;
+    }
+
+    .question {
+      .title {
+        margin-bottom: 30px;
+        white-space: pre-wrap;
+      }
+
+      .answer {
+        margin-bottom: 10px;
+
+        .checkbox {
+          text-align: center;
+          display: inline-block;
+
+          .radio {
+            vertical-align: top;
+            width: 17px;
+            height: 17px;
+            margin: 0 3px 0 0;
+          }
+          .radio + label {
+            cursor: pointer;
+            vertical-align: middle;
+          }
+          .radio:not(checked) {
+            position: absolute;
+            opacity: 0;
+          }
+          .radio:not(checked) + label {
+            position: relative;
+            padding: 0 0 0 35px;
+          }
+          .radio:not(checked) + label:before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            border: 1px solid #cacaca;
+            border-radius: 50%;
+            background: #FFF;
+          }
+          .radio:not(checked) + label:after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #6ae989;
+            opacity: 0;
+            transition: all .2s;
+          }
+          .radio:checked + label:after {
+            opacity: 1;
+          }
+          .radio:focus + label:before {
+            /*box-shadow: 0 0 0 2px rgba(14,45,150,.3);*/
+          }
+        }
+      }
+    }
+
+    .audio {
+      min-height: ~"calc(100vh - 300px)";
+      background: @slide-background-color;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .buttons-row {
+    .slide-button(@color) {
+      color: @color;
+      background: none;
+      border: 1px solid @color;
+      font-weight: normal;
+      padding-top: 15px;
+    }
+    .close-presentation, .pause-presentation {
+      .slide-button(@training-red);
+    }
+    .time-limit {
+      margin-top: 15px;
+      display: none;
+    }
+    .next-slide {
+      .slide-button(@training-green);
+    }
+    .prev-slide {
+      .slide-button(@training-green);
+    }
+  }
+}

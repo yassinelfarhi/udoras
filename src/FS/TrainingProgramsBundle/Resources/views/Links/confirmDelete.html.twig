@@ -1,0 +1,16 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title text-center">Delete link</h4>
+    </div>
+    <div class="modal-body">
+        <p class="text-center">
+            Delete link to Free training? No more users will be able to pass training with this link
+        </p>
+        <br/>
+        <br/>
+        <p class="text-center">
+            <a class="btn btn-default" data-dismiss="modal" href="#">Cancel</a>
+            <a class="btn btn-danger delete-link" href="{{ path('admin_delete_training_program_link', {'trainingProgram': trainingProgram.id, 'link': link.id}) }}">Delete</a>
+        </p>
+    </div>
+</div>
